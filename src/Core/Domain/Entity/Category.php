@@ -4,6 +4,7 @@ namespace Core\Domain\Entity;
 
 use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\Validation\DomainValidation;
+use Core\Domain\ValueObject\Uuid;
 
 class Category
 {
@@ -16,11 +17,11 @@ class Category
 	 */
 	public function __construct(
 		protected string $name,
-		protected string $id = '',
+		protected Uuid | string $id = '',
 		protected string $description = '',
 		protected bool $isActive = true
 	) {
-
+		$this->id = $this->id ? new Uuid($this->id) : Uuid::random();
 		$this->validate();
 	}
 		
@@ -65,17 +66,6 @@ class Category
 		DomainValidation::str_max_length($this->name);
 		DomainValidation::str_min_length($this->name);
 		DomainValidation::str_can_null_and_max_length($this->description);
-
-		// if (empty($this->name)) {
-		// 	throw new EntityValidationException('Nome inválido');
-		// }
-		// if ((strlen($this->name) >= 255 || strlen($this->name) <= 2)) {
-		// 	throw new EntityValidationException('Nome precisa ser maior que 3 e menor que 255 caracteres');
-		// }		
-
-		// if (!empty($this->description) && (strlen($this->description) > 255 || strlen($this->description) < 3)) {
-		// 	throw new EntityValidationException('Descrição precisa ser maior que 3 e menor que 255 caracteres');
-		// }
 		
 	}
 		
