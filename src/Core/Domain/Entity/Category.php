@@ -3,6 +3,7 @@
 namespace Core\Domain\Entity;
 
 use Core\Domain\Exception\EntityValidationException;
+use Core\Domain\Validation\DomainValidation;
 
 class Category
 {
@@ -61,16 +62,20 @@ class Category
 
 	public function validate(): void
 	{
-		if (empty($this->name)) {
-			throw new EntityValidationException('Nome inválido');
-		}
-		if ((strlen($this->name) > 255 || strlen($this->name) < 3)) {
-			throw new EntityValidationException('Nome precisa ser maior que 3 e menor que 255 caracteres');
-		}		
+		DomainValidation::str_max_length($this->name);
+		DomainValidation::str_min_length($this->name);
+		DomainValidation::str_can_null_and_max_length($this->description);
 
-		if (!empty($this->description) && (strlen($this->description) > 255 || strlen($this->description) < 3)) {
-			throw new EntityValidationException('Descrição precisa ser maior que 3 e menor que 255 caracteres');
-		}
+		// if (empty($this->name)) {
+		// 	throw new EntityValidationException('Nome inválido');
+		// }
+		// if ((strlen($this->name) >= 255 || strlen($this->name) <= 2)) {
+		// 	throw new EntityValidationException('Nome precisa ser maior que 3 e menor que 255 caracteres');
+		// }		
+
+		// if (!empty($this->description) && (strlen($this->description) > 255 || strlen($this->description) < 3)) {
+		// 	throw new EntityValidationException('Descrição precisa ser maior que 3 e menor que 255 caracteres');
+		// }
 		
 	}
 		

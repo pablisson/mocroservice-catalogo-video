@@ -56,13 +56,13 @@ class CategoryUnitTest extends TestCase
 	{
 		try{
 			$category =new Category(
-				name: 'C5',
+				name: 'C8',
 				description: 'Description 1'
 			);
-			//$this->assertTrue(false);
+			$this->assertTrue(false);
 		}catch( Throwable $th){
+			//$this->assertTrue(true);
 			$this->isInstanceOf(EntityValidationException::class, $th);
-			$this->assertTrue(True);
 		}
 	}
 }
