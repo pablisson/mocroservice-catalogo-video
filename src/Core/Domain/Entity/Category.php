@@ -27,7 +27,7 @@ class Category
 		
 	public function id(): string
 	{
-		return $this->id;
+		return (string)$this->id;
 	}
 
 	public function name(): string
