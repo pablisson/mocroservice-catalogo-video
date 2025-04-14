@@ -45,10 +45,10 @@ class DomainValidationUnitTest extends TestCase
 	{
 		try {
 			$value = "Teste";
-			DomainValidation::str_min_length($value, 5, 'Custom message error');
+			DomainValidation::str_min_length($value, 6, '');
 			$this->assertTrue(false);
-		} catch (\Throwable $th) {
-			$this->assertInstanceOf(EntityValidationException::class, $th, 'Custom message error');			
+		} catch (\Throwable $th) {			
+			$this->assertInstanceOf(EntityValidationException::class, $th, '');			
 		}
 	}
 

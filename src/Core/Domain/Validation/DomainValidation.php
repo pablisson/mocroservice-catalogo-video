@@ -26,9 +26,9 @@ class DomainValidation
 		}
 	}
 
-	public static function str_min_length(string $value, int $length = 2, string $message=''): void
+	public static function str_min_length(string $value, int $length = 3, string $message=''): void
 	{
-		if (strlen($value) <= $length) {
+		if (strlen($value) < $length) {			
 			throw new EntityValidationException( empty($message)??"O valor deve ser maior que {$length} caracteres");
 		}
 	}
