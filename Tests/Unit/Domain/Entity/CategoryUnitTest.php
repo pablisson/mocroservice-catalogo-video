@@ -19,9 +19,9 @@ class CategoryUnitTest extends TestCase
 		);
 
 		$this->assertNotEmpty($category->id());
-		$this->assertEquals('Category 1', $category->name());
-		$this->assertEquals('Description 1', $category->description());
-		$this->assertTrue(true, $category->isActive());
+		$this->assertEquals('Category 1', $category->name);
+		$this->assertEquals('Description 1', $category->description);
+		$this->assertTrue(true, $category->isActive);
 	}
 
 	public function test_activated(){
@@ -29,12 +29,12 @@ class CategoryUnitTest extends TestCase
 			name: 'Category 1',
 		);
 
-		$this->assertTrue($category->isActive());
+		$this->assertTrue($category->isActive);
 		$category->deactivate();
 
-		$this->assertFalse($category->isActive());
+		$this->assertFalse($category->isActive);
 		$category->activate();
-		$this->assertTrue($category->isActive());
+		$this->assertTrue($category->isActive);
 	}
 
 	public function test_update(){
@@ -52,8 +52,8 @@ class CategoryUnitTest extends TestCase
 		);
 
 		$this->assertEquals($uuid, $category->id());
-		$this->assertEquals('new name', $category->name());
-		$this->assertEquals('new Description 1', $category->description());
+		$this->assertEquals('new name', $category->name);
+		$this->assertEquals('new Description 1', $category->description);
 	}
 
 	public function test_exception_name()

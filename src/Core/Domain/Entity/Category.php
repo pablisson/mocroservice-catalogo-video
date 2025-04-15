@@ -8,7 +8,7 @@ use Core\Domain\ValueObject\Uuid;
 
 class Category
 {
-	//use Traits\MethodsMagicsTrait;
+	use Traits\MethodsMagicsTrait;
 	/**
 	 * @param string $id
 	 * @param string $name
@@ -29,20 +29,9 @@ class Category
 	{
 		return (string)$this->id;
 	}
-
-	public function name(): string
+	public function deactivate(): void 
 	{
-		return $this->name;
-	}
-
-	public function description(): string
-	{
-		return $this->description;
-	}
-
-	public function isActive(): bool
-	{
-		return $this->isActive;
+		$this->isActive = false;
 	}
 
 	public function activate(): void 
@@ -50,11 +39,6 @@ class Category
 		$this->isActive = true;
 	}
 
-	public function deactivate(): void 
-	{
-		$this->isActive = false;
-	}
-	
 	public function update(string $name, string $description): void
 	{
 		$this->name = $name;
