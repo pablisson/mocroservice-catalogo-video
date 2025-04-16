@@ -6,9 +6,7 @@ use Core\Domain\Entity\Category;
 
 interface PaginationInterface
 {
-	/**
-	 * @return stdClass
-	 */
+
 	public function items(): array;
 	public function total(): int;
 	public function lastPage(): int;
