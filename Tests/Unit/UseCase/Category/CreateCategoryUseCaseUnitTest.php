@@ -17,6 +17,7 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 	protected $mockEntity;
 	protected $mockRepository;
 	protected $mockInputDto;
+	protected $spy;
 	
 	public function test_create_new_category()
 	{
@@ -48,6 +49,19 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 		$this->isInstanceOf(CategoryCreateOutputDto::class, $responseUseCase);
 		self::assertEquals($categoryName, $responseUseCase->name);
 		self::assertEquals($categoryDescription, $responseUseCase->description);
+
+		/**
+		 * Spies para verificar se chamou o metodo insert
+		 */
+		$this->spy = Mockery::spy(CategoryRepositoryInterface::class);
+		$this->spy
+			->shouldReceive('insert')
+			->once()
+			->andReturn($this->mockEntity);
+		$useCase = new CreateCategoryUseCase($this->spy);
+		$responseUseCase = $useCase->execute($this->mockInputDto);
+		$this->spy
+			->shouldHaveReceived('insert');
 		Mockery::close();
 	}
 	
