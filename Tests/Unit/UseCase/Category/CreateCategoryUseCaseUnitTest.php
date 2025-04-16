@@ -4,6 +4,8 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
+use Core\DTO\Category\CategoryCreateInputDto;
+use Core\DTO\Category\CategoryCreateOutputDto;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -14,29 +16,39 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 {
 	protected $mockEntity;
 	protected $mockRepository;
+	protected $mockInputDto;
+	
 	public function test_create_new_category()
 	{
-		$uuid ='';
 
-		$category = new Category(
-			name: 'Category 1',
-			id: $uuid,
-			description: 'Description 1',
-			isActive: true,
-			createdAt: '2023-10-01 00:00:00'
+		$categoryName = 'Category use case 1';
+		$categoryDescription = 'Description 1';
+		$categoryIsActive = true;
+
+		$this->mockEntity = new Category(
+				name: $categoryName,
+				description: $categoryDescription,
+				isActive: $categoryIsActive
 		);
-		
+
 		$this->mockRepository = Mockery::mock(CategoryRepositoryInterface::class);
-		$this->mockRepository->shouldReceive('insert')
-			->once()
-			->andReturn($category);
+		$this->mockRepository
+			->shouldReceive('insert')			
+			->andReturn($this->mockEntity);
 		
-		$useCase = new CreateCategoryUseCase(
-			$this->mockRepository
+		$this->mockInputDto = new CategoryCreateInputDto(
+			name: $categoryName,
+			description: $categoryDescription,
+			isActive: $categoryIsActive
 		);
-		$useCase->execute();
 
-		$this->assertTrue(true);
+		$useCase = new CreateCategoryUseCase($this->mockRepository);
+		$responseUseCase = $useCase->execute($this->mockInputDto);
+
+		$this->isInstanceOf(CategoryCreateOutputDto::class, $responseUseCase);
+		self::assertEquals($categoryName, $responseUseCase->name);
+		self::assertEquals($categoryDescription, $responseUseCase->description);
 		Mockery::close();
 	}
+	
 }

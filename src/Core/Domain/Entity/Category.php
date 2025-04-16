@@ -27,7 +27,7 @@ class Category
 		$this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
 		$this->validate();
 	}
-		
+	
 	public function deactivate(): void 
 	{
 		$this->isActive = false;
@@ -44,13 +44,11 @@ class Category
 		$this->description = $description;
 	}
 
-	public function validate(): void
+	private function validate(): void
 	{
 		DomainValidation::str_max_length($this->name);
 		DomainValidation::str_min_length($this->name);
 		DomainValidation::str_can_null_and_max_length($this->description);
 		
 	}
-		
-
 }
