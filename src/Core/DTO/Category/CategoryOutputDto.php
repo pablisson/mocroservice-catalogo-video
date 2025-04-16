@@ -2,13 +2,14 @@
 
 namespace Core\DTO\Category;
 
-class CategoryCreateOutputDto
+class CategoryOutputDto
 {
 	public function __construct(
-		public string $name,
 		public string $id,
+		public string $name,
 		public string $description = '',
-		public bool $isActive = true,
+		public bool $is_active = true,
+		public string $created_at = '',
 	) {
 	}
 
@@ -18,7 +19,7 @@ class CategoryCreateOutputDto
 		return [
 			'name' => $this->name,
 			'description' => $this->description,
-			'isActive' => $this->isActive,
+			'isActive' => $this->is_active,
 		];
 	}
 }

@@ -4,64 +4,56 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryCreateInputDto;
-use Core\DTO\Category\CategoryCreateOutputDto;
+use Core\DTO\Category\CategoryInputDto;
+use Core\DTO\Category\CategoryOutputDto;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use stdClass;
+
 
 class CreateCategoryUseCaseUnitTest extends TestCase
 {
-	protected $mockEntity;
-	protected $mockRepository;
-	protected $mockInputDto;
-	protected $spy;
-	
 	public function test_create_new_category()
 	{
-
 		$categoryName = 'Category use case 1';
 		$categoryDescription = 'Description 1';
 		$categoryIsActive = true;
 
-		$this->mockEntity = new Category(
+		$mockEntity = new Category(
 				name: $categoryName,
 				description: $categoryDescription,
 				isActive: $categoryIsActive
 		);
 
-		$this->mockRepository = Mockery::mock(CategoryRepositoryInterface::class);
-		$this->mockRepository
+		$mockRepository = Mockery::mock(CategoryRepositoryInterface::class);
+		$mockRepository
 			->shouldReceive('insert')			
-			->andReturn($this->mockEntity);
+			->andReturn($mockEntity);
 		
-		$this->mockInputDto = new CategoryCreateInputDto(
+		$mockInputDto = new CategoryInputDto(
 			name: $categoryName,
 			description: $categoryDescription,
 			isActive: $categoryIsActive
 		);
 
-		$useCase = new CreateCategoryUseCase($this->mockRepository);
-		$responseUseCase = $useCase->execute($this->mockInputDto);
+		$useCase = new CreateCategoryUseCase($mockRepository);
+		$responseUseCase = $useCase->execute($mockInputDto);
 
-		$this->isInstanceOf(CategoryCreateOutputDto::class, $responseUseCase);
-		self::assertEquals($categoryName, $responseUseCase->name);
-		self::assertEquals($categoryDescription, $responseUseCase->description);
+		$this->isInstanceOf(CategoryOutputDto::class, $responseUseCase);
+		$this->assertEquals($categoryName, $responseUseCase->name);
+		$this->assertEquals($categoryDescription, $responseUseCase->description);
 
 		/**
 		 * Spies para verificar se chamou o metodo insert
 		 */
-		$this->spy = Mockery::spy(CategoryRepositoryInterface::class);
-		$this->spy
+		$spy = Mockery::spy(CategoryRepositoryInterface::class);
+		$spy
 			->shouldReceive('insert')
 			->once()
-			->andReturn($this->mockEntity);
-		$useCase = new CreateCategoryUseCase($this->spy);
-		$responseUseCase = $useCase->execute($this->mockInputDto);
-		$this->spy
-			->shouldHaveReceived('insert');
+			->andReturn($mockEntity);
+		$useCase = new CreateCategoryUseCase($spy);
+		$responseUseCase = $useCase->execute($mockInputDto);
+		$spy->shouldHaveReceived('insert');
 		Mockery::close();
 	}
 	
