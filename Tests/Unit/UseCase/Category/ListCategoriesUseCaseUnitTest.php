@@ -83,7 +83,7 @@ class ListCategoriesUseCaseUnitTest extends TestCase
 		parent::tearDown();
 	}
 
-	public function test_listCategories()
+	public function test_list_categories()
 	{
 		$register = new stdClass();
 		$register->id = '1';
