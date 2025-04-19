@@ -22,6 +22,7 @@ class Category
 		protected string $description = '',
 		protected bool $isActive = true,
 		protected DateTime|string $createdAt = '',
+		protected DateTime|string $deletedAt = '',
 	) {
 		$this->id = $this->id ? new Uuid($this->id) : Uuid::random();
 		$this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
@@ -42,6 +43,11 @@ class Category
 	{
 		$this->name = $name;
 		$this->description = $description;
+	}
+
+	public function delete(): void
+	{
+		$this->deletedAt = new DateTime();
 	}
 
 	private function validate(): void

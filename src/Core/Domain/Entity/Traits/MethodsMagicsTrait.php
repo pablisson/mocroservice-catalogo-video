@@ -24,4 +24,9 @@ trait MethodsMagicsTrait
 	{
 		return $this->createdAt->format($format);
 	}
+
+	public function deletedAt(string $format = 'Y-m-d H:i:s'): string
+	{
+		return $this->deletedAt ? $this->deletedAt->format($format) : null;
+	}
 }
