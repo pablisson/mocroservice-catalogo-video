@@ -16,7 +16,6 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 {
 	public function test_update_category()
 	{
-		// criar uma categoria
 		$id = Uuid::uuid4()->toString();
 		$categoryName = 'Category use case 1';
 		$categoryDescription = 'Description 1';
@@ -57,21 +56,6 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 		$this->assertNotEquals($categoryName, $responseUseCase->name);
 		$this->assertEquals($categoryDescription, $responseUseCase->description);
 
-		/**
-		 * spies
-		 */
-		/*
-		$spy = Mockery::spy(CategoryRepositoryInterface::class);
-		$spy
-			->shouldReceive('update')
-			->once()
-			->andReturn($categoryEntity);
-		$spy->shouldReceive('findById')
-		->andReturn($categoryEntity)
-		$useCase = new CreateCategoryUseCase($spy);
-		$responseUseCase = $useCase->execute($mockInputDto);
-		$spy->shouldHaveReceived('insert');
-		Mockery::close();
-		*/
+
 	}
 }

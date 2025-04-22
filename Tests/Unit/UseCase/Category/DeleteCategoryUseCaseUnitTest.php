@@ -4,7 +4,6 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryOutputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoriesInputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoriesOutputDto;
 use Core\UseCase\Category\DeleteCategoryUseCase;
@@ -16,7 +15,6 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 {
 	public function test_delete_category()
 	{
-		// criar uma categoria
 		$id = Uuid::uuid4()->toString();
 		$categoryName = 'Category use case 1';
 		$categoryDescription = 'Description 1';
@@ -53,21 +51,5 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 		$this->isInstanceOf(DeleteCategoriesOutputDto::class, $responseUseCase);
 		$this->assertNotEquals($categoryEntity->deletedAt(), null);
 
-		/**
-		 * spies
-		 */
-		/*
-		$spy = Mockery::spy(CategoryRepositoryInterface::class);
-		$spy
-			->shouldReceive('update')
-			->once()
-			->andReturn($categoryEntity);
-		$spy->shouldReceive('findById')
-		->andReturn($categoryEntity)
-		$useCase = new CreateCategoryUseCase($spy);
-		$responseUseCase = $useCase->execute($mockInputDto);
-		$spy->shouldHaveReceived('insert');
-		Mockery::close();
-		*/
 	}
 }
