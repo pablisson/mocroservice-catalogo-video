@@ -2,7 +2,7 @@
 
 namespace Core\DTO\Category\DeleteCategories;
 
-class DeleteCategoriesInputDto
+class DeleteCategoryInputDto
 {
 	public function __construct(
 		public string $id = '',

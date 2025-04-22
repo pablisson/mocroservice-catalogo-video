@@ -3,9 +3,8 @@
 namespace Core\UseCase\Category;
 
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryOutputDto;
-use Core\DTO\Category\DeleteCategories\DeleteCategoriesInputDto;
-use Core\DTO\Category\DeleteCategories\DeleteCategoriesOutputDto;
+use Core\DTO\Category\DeleteCategories\DeleteCategoryInputDto;
+use Core\DTO\Category\DeleteCategories\DeleteCategoryOutputDto;
 use DateTime;
 use Mockery;
 
@@ -17,7 +16,7 @@ class DeleteCategoryUseCase
 
 	}
 
-	public function execute(DeleteCategoriesInputDto $inputDto): DeleteCategoriesOutputDto
+	public function execute(DeleteCategoryInputDto $inputDto): DeleteCategoryOutputDto
 	{
 		$category = $this->repository->findById($inputDto->id);
 		if (!$category) {
@@ -31,7 +30,7 @@ class DeleteCategoryUseCase
 			throw new \Exception('Error deleting category');
 		}
 
-		$deleteCategoriesOutputDto = new DeleteCategoriesOutputDto(
+		$deleteCategoriesOutputDto = new DeleteCategoryOutputDto(
 			id: $category->id ?? $inputDto->id,
 			name: $category->name ?? $inputDto->name,
 			description: $category->description ?? $inputDto->description,

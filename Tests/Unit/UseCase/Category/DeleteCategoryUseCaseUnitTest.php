@@ -4,8 +4,8 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\DeleteCategories\DeleteCategoriesInputDto;
-use Core\DTO\Category\DeleteCategories\DeleteCategoriesOutputDto;
+use Core\DTO\Category\DeleteCategories\DeleteCategoryInputDto;
+use Core\DTO\Category\DeleteCategories\DeleteCategoryOutputDto;
 use Core\UseCase\Category\DeleteCategoryUseCase;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 		
 		$categoryEntity->delete();
 
-		$deleteInputDto = new DeleteCategoriesInputDto(
+		$deleteInputDto = new DeleteCategoryInputDto(
 			id: $categoryEntity->id,
 			name: $categoryEntity->name,
 			description: $categoryEntity->description,
@@ -48,7 +48,7 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 		$useCase = new DeleteCategoryUseCase($mockRepository);
 		$responseUseCase = $useCase->execute($deleteInputDto);
 
-		$this->isInstanceOf(DeleteCategoriesOutputDto::class, $responseUseCase);
+		$this->isInstanceOf(DeleteCategoryOutputDto::class, $responseUseCase);
 		$this->assertNotEquals($categoryEntity->deletedAt(), null);
 
 		/**
