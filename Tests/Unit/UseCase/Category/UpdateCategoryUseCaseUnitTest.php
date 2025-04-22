@@ -4,9 +4,8 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryInputDto;
-use Core\DTO\Category\CategoryOutputDto;
-use Core\UseCase\Category\CreateCategoryUseCase;
+use Core\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
+use Core\DTO\Category\UpdateCategory\UpdateCategoryOutputDto;
 use Core\UseCase\Category\UpdateCategoryUseCase;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -41,7 +40,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 			description: $categoryDescription
 		);
 
-		$mockInputDto = new CategoryInputDto(
+		$mockInputDto = new UpdateCategoryInputDto(
 			id: $categoryEntity->id,
 			name: $categoryEntity->name,
 			description: $categoryEntity->description,
@@ -51,7 +50,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 		$useCase = new UpdateCategoryUseCase($mockRepository);
 		$responseUseCase = $useCase->execute($mockInputDto);
 
-		$this->isInstanceOf(CategoryOutputDto::class, $responseUseCase);
+		$this->isInstanceOf(UpdateCategoryOutputDto::class, $responseUseCase);
 		$this->assertEquals($categoryEntity->id, $responseUseCase->id);
 		$this->assertNotEquals($categoryName, $responseUseCase->name);
 		$this->assertEquals($categoryDescription, $responseUseCase->description);

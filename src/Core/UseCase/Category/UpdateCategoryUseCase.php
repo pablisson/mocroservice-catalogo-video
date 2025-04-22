@@ -2,10 +2,9 @@
 
 namespace Core\UseCase\Category;
 
-use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryInputDto;
-use Core\DTO\Category\CategoryOutputDto;
+use Core\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
+use Core\DTO\Category\UpdateCategory\UpdateCategoryOutputDto;
 
 class UpdateCategoryUseCase
 {
@@ -15,7 +14,7 @@ class UpdateCategoryUseCase
 
 	}
 
-	public function execute(CategoryInputDto $inputDto): CategoryOutputDto
+	public function execute(UpdateCategoryInputDto $inputDto): UpdateCategoryOutputDto	
 	{
 		$category = $this->repository->findById($inputDto->id);
 		// if (!$category) {
@@ -29,7 +28,7 @@ class UpdateCategoryUseCase
 
 		$categoryUpdated = $this->repository->update($category);
 
-		return new CategoryOutputDto(
+		return new UpdateCategoryOutputDto(
 			name: $categoryUpdated->name,
 			id: $categoryUpdated->id,
 			description: $categoryUpdated->description,
