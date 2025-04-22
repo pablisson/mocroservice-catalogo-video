@@ -41,7 +41,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 			description: $categoryDescription
 		);
 
-		$mockCreateInputDto = new CategoryInputDto(
+		$mockInputDto = new CategoryInputDto(
 			id: $categoryEntity->id,
 			name: $categoryEntity->name,
 			description: $categoryEntity->description,
@@ -49,13 +49,22 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
 		);
 
 		$useCase = new UpdateCategoryUseCase($mockRepository);
-		$responseUseCase = $useCase->execute($mockCreateInputDto);
+		$responseUseCase = $useCase->execute($mockInputDto);
 
 		$this->isInstanceOf(CategoryOutputDto::class, $responseUseCase);
 		$this->assertEquals($categoryEntity->id, $responseUseCase->id);
 		$this->assertNotEquals($categoryName, $responseUseCase->name);
 		$this->assertEquals($categoryDescription, $responseUseCase->description);
 
-
+        /**
+         * Spies
+         */
+        $spy = Mockery::spy(CategoryRepositoryInterface::class);
+        $spy->shouldReceive('findById')->andReturn($categoryEntity);
+        $spy->shouldReceive('update')->andReturn($categoryEntity);
+        $useCase = new UpdateCategoryUseCase($spy);
+        $useCase->execute($mockInputDto);
+        $spy->shouldHaveReceived('findById');
+        $spy->shouldHaveReceived('update');
 	}
 }
