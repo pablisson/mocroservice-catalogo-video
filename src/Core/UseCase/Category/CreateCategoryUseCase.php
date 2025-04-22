@@ -29,7 +29,8 @@ class CreateCategoryUseCase
 			name: $newCategory->name,
 			id: $newCategory->id,
 			description: $newCategory->description,
-			is_active: $newCategory->isActive
+			is_active: $newCategory->isActive,
+			created_at: $newCategory->createdAt(),
 		);
 	}
 
