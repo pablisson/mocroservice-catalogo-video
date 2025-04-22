@@ -4,8 +4,8 @@ namespace Tests\Unit\UseCase\Category;
 
 use Core\Domain\Entity\Category;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\DTO\Category\CategoryInputDto;
-use Core\DTO\Category\CategoryOutputDto;
+use Core\DTO\Category\CreateCategory\CreateCategoryInputDto;
+use Core\DTO\Category\CreateCategory\CreateCategoryOutputDto;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 			->shouldReceive('insert')			
 			->andReturn($mockEntity);
 		
-		$mockInputDto = new CategoryInputDto(
+		$mockInputDto = new CreateCategoryInputDto(
 			name: $categoryName,
 			description: $categoryDescription,
 			isActive: $categoryIsActive
@@ -39,7 +39,7 @@ class CreateCategoryUseCaseUnitTest extends TestCase
 		$useCase = new CreateCategoryUseCase($mockRepository);
 		$responseUseCase = $useCase->execute($mockInputDto);
 
-		$this->isInstanceOf(CategoryOutputDto::class, $responseUseCase);
+		$this->isInstanceOf(CreateCategoryOutputDto::class, $responseUseCase);
 		$this->assertEquals($categoryName, $responseUseCase->name);
 		$this->assertEquals($categoryDescription, $responseUseCase->description);
 
