@@ -38,7 +38,7 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 		
 		$categoryEntity->delete();
 
-		$mockCreateInputDto = new DeleteCategoriesInputDto(
+		$deleteInputDto = new DeleteCategoriesInputDto(
 			id: $categoryEntity->id,
 			name: $categoryEntity->name,
 			description: $categoryEntity->description,
@@ -46,10 +46,27 @@ class DeleteCategoryUseCaseUnitTest extends TestCase
 		);
 
 		$useCase = new DeleteCategoryUseCase($mockRepository);
-		$responseUseCase = $useCase->execute($mockCreateInputDto);
+		$responseUseCase = $useCase->execute($deleteInputDto);
 
 		$this->isInstanceOf(DeleteCategoriesOutputDto::class, $responseUseCase);
 		$this->assertNotEquals($categoryEntity->deletedAt(), null);
 
+		/**
+		 * * Verifica se o método delete foi chamado
+		 */
+		$spy = Mockery::spy(CategoryRepositoryInterface::class);
+		$spy->shouldReceive('delete')
+			->andReturn(true);
+		
+		$useCase = new DeleteCategoryUseCase($spy);
+		$responseUseCase = $useCase->execute($deleteInputDto);
+		$spy->shouldHaveReceived('delete');
 	}
+
+	protected function tearDown(): void
+	{
+		Mockery::close();
+		parent::tearDown();
+	}
+
 }

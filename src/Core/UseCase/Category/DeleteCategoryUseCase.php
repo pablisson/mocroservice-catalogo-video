@@ -6,8 +6,10 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\DTO\Category\CategoryOutputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoriesInputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoriesOutputDto;
+use DateTime;
+use Mockery;
 
-class DeleteCategoryUseCase
+class DeleteCategoryUseCase 
 {
 	public function __construct(
 		protected CategoryRepositoryInterface $repository
@@ -18,24 +20,29 @@ class DeleteCategoryUseCase
 	public function execute(DeleteCategoriesInputDto $inputDto): DeleteCategoriesOutputDto
 	{
 		$category = $this->repository->findById($inputDto->id);
-		// if (!$category) {
-		// 	throw new \Exception('Category not found');
-		// }
+		if (!$category) {
+			throw new \Exception('Category not found');
+		}
+		$dateNow = new DateTime();
 
 		$wasDeleted = $this->repository->delete($inputDto->id);
-
+		
 		if(!$wasDeleted) {
 			throw new \Exception('Error deleting category');
 		}
 
-		return new DeleteCategoriesOutputDto(
-				id: $category->id(),
-				name: $category->name,
-				description: $category->description,
-				is_active: $category->isActive,
-				created_at: $category->createdAt(),
-				deleted_at: $category->deletedAt(),
-			);
+		$deleteCategoriesOutputDto = new DeleteCategoriesOutputDto(
+			id: $category->id ?? $inputDto->id,
+			name: $category->name ?? $inputDto->name,
+			description: $category->description ?? $inputDto->description,
+			is_active: $category->isActive ?? $inputDto->isActive,
+			created_at: isset($category->createdAt)
+				? $category->createdAt->format('Y-m-d H:i:s')
+				: $dateNow->format('Y-m-d H:i:s'),
+			deleted_at: isset($category->deletedAt)
+				? $category->deletedAt->format('Y-m-d H:i:s')
+				: $dateNow->format('Y-m-d H:i:s'),
+		);
+		return $deleteCategoriesOutputDto;
 	}
-
 }
