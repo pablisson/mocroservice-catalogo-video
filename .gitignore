@@ -2,3 +2,4 @@
 *.log
 .phpunit.result.cache
 .docker/dbdata
+.env
