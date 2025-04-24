@@ -4,3 +4,6 @@
 .docker/dbdata
 .env
 .bash_history
+.ssh
+.vscode-server
+.vscode
