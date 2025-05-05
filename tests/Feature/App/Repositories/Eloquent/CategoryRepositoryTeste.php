@@ -68,11 +68,10 @@ class CategoryRepositoryTeste extends TestCase
 
 	public function test_find_all(): void
 	{
-		CategoryModel::factory()->count(10)->create();
+		$categories = CategoryModel::factory()->count(10)->create();
 		$response = $this->repository->findAll();
-		$this->assertCount(10, $response);
+		// $this->assertCount(10, $response);
+		$this->assertEquals(count($categories), count($response));
 
-		// $categoryModel = CategoryModel::factory()->create();
-		// $reponse = $this->repository->findAll();
 	}
 }
