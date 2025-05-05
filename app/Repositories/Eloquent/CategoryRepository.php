@@ -40,16 +40,20 @@ class CategoryRepository implements CategoryRepositoryInterface
 
 	public function findAll(string $filter = '', $order='DESC'): array
 	{
-		$categories = $this->model->where('name', 'like', "%$filter%")
+		$categories = $this->model
+			->where(function($query) use ($filter){
+				if ($filter) {
+					$query->where('name', 'LIKE', "%{$filter}%");
+				}
+			})
 			->orderBy('created_at', $order)
 			->get();
+			
 		if ($categories->isEmpty()) {
 			return [];
 		}
  
-		return array_map(function ($category) {
-			return $this->toCategory($category);
-		}, $categories->toArray());
+		return $categories->toArray();
 	}
 
 	public function paginate(string $filter = '', string $order='DESC', int $page = 1, int $totalPage = 15): PaginationInterface

@@ -49,7 +49,7 @@ class CategoryRepositoryTeste extends TestCase
 	{
 		$categoryModel = CategoryModel::factory()->create();
 		$reponse = $this->repository->findById($categoryModel->id);
-		
+
 		$this->assertInstanceOf(EntityCategory::class, $reponse);
 		$this->assertEquals($categoryModel->id, $reponse->id());
 
@@ -64,5 +64,15 @@ class CategoryRepositoryTeste extends TestCase
 		} catch (\Exception $e) {
 			$this->assertInstanceOf(NotFoundException::class, $e);
 		}
+	}
+
+	public function test_find_all(): void
+	{
+		CategoryModel::factory()->count(10)->create();
+		$response = $this->repository->findAll();
+		$this->assertCount(10, $response);
+
+		// $categoryModel = CategoryModel::factory()->create();
+		// $reponse = $this->repository->findAll();
 	}
 }
