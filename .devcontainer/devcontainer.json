@@ -37,5 +37,14 @@
   // "customizations": {},
 
   // Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-  "remoteUser": "devcontainer"
+  "remoteUser": "devcontainer",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "calebporzio.better-phpunit",
+        "bmewburn.vscode-intelephense-client",
+        "amiralizadeh9480.laravel-extra-intellisense"
+      ]
+    }
+  }
 }
