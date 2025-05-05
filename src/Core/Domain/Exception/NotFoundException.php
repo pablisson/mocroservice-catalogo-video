@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Domain\Exception\NotFoundDomainException;
+namespace Core\Domain\Exception;
 
 use Exception;
 
-class NotFoundDomainException extends Exception
+class NotFoundException extends Exception
 {
 
 }

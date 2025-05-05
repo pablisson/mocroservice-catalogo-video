@@ -5,8 +5,8 @@ namespace Tests\Feature\App\Repositories\Eloquent;
 use App\Models\Category as CategoryModel;
 use App\Repositories\Eloquent\CategoryRepository;
 use Core\Domain\Entity\Category as EntityCategory;
+use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Core\Domain\Exception\NotFoundDomainException;
 use Tests\Unit\TestCase;
 
 class CategoryRepositoryTeste extends TestCase
@@ -53,16 +53,6 @@ class CategoryRepositoryTeste extends TestCase
 		$this->assertInstanceOf(EntityCategory::class, $reponse);
 		$this->assertEquals($categoryModel->id, $reponse->id());
 
-		// $entity = new EntityCategory(
-		// 	name: 'Test Category',
-		// );
-
-		// $response = $this->repository->insert($entity);
-
-		// $category = $this->repository->findById($response->id());
-
-		// $this->assertInstanceOf(EntityCategory::class, $category);
-		// $this->assertEquals($response->id(), $category->id());
 	}
 
 	public function test_find_by_id_not_found(): void
@@ -72,7 +62,7 @@ class CategoryRepositoryTeste extends TestCase
 
 			$this->assertTrue(false, 'Não estou a exception');
 		} catch (\Exception $e) {
-			$this->assertInstanceOf(NotFoundDomainException::class, $e);
+			$this->assertInstanceOf(NotFoundException::class, $e);
 		}
 	}
 }

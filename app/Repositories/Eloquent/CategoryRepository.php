@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Category as ModelCategory;
 use App\Repositories\Presenters\PaginationPresenter;
 use Core\Domain\Entity\Category as EntityCategory;
+use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\PaginationInterface;
 
@@ -31,7 +32,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 	{
 		$categoryModel = $this->model->find($id);
 		if (!$categoryModel) {
-			return null;
+			throw new NotFoundException();
 		}
 		
 		return $this->toCategory($categoryModel);
@@ -91,6 +92,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 	public function toCategory(object $object): EntityCategory
 	{
 		return new EntityCategory(
+			id: $object->id,
 			name: $object->name
 		);
 	}
