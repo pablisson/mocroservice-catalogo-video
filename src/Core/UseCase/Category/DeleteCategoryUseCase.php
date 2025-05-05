@@ -18,10 +18,12 @@ class DeleteCategoryUseCase
 
 	public function execute(DeleteCategoryInputDto $inputDto): DeleteCategoryOutputDto
 	{
+		/*
 		$category = $this->repository->findById($inputDto->id);
 		if (!$category) {
 			throw new \Exception('Category not found');
 		}
+		*/
 		$dateNow = new DateTime();
 
 		$wasDeleted = $this->repository->delete($inputDto->id);
