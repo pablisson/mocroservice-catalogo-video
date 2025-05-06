@@ -40,38 +40,39 @@ class CategoryRepository implements CategoryRepositoryInterface
 
 	public function findAll(string $filter = '', $order='DESC'): array
 	{
-		$categories = $this->model->where('name', 'like', "%$filter%")
+		$categories = $this->model
+			->where(function($query) use ($filter){
+				if ($filter) {
+					$query->where('name', 'LIKE', "%{$filter}%");
+				}
+			})
 			->orderBy('created_at', $order)
 			->get();
+			
 		if ($categories->isEmpty()) {
 			return [];
 		}
  
-		return array_map(function ($category) {
-			return $this->toCategory($category);
-		}, $categories->toArray());
+		return $categories->toArray();
 	}
 
 	public function paginate(string $filter = '', string $order='DESC', int $page = 1, int $totalPage = 15): PaginationInterface
 	{
-
-		return new PaginationPresenter(
-			items: [],
-			total: 0,
-			lastPage: 1,
-			firstPage: 1,
-			currentPage: $page,
-			perPage: $totalPage,
-			to: 0,
-			from: 0
-		);
+		$query = $this->model;
+		if ($filter) {
+			$query->where('name', 'LIKE', "%{$filter}%");
+		}
+		$query->orderBy('created_at', $order);
+		$paginator = $query->paginate();
+		
+		return new PaginationPresenter($paginator);
 	}
 
 	public function update(EntityCategory $entity): EntityCategory
 	{
 		$categoryModel = $this->model->find($entity->id());
 		if (!$categoryModel) {
-			throw new \Exception('Category not found');
+			throw new NotFoundException("Category id: {$entity->id()} not found");
 		}
 
 		$categoryModel->update([
@@ -81,12 +82,19 @@ class CategoryRepository implements CategoryRepositoryInterface
 			'updated_at' => $entity->updatedAt,
 		]);
 
+		$categoryModel->refresh();
+
 		return $this->toCategory($categoryModel);
 	}
 
 	public function delete(string $id): bool
 	{
-		return true;
+		$categoryModel = $this->model->find($id);
+		if (!$categoryModel) {
+			throw new NotFoundException("Category id: {$id} not found");
+		}
+
+		return $categoryModel->delete();
 	}
 
 	public function toCategory(object $object): EntityCategory
