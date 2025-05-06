@@ -72,7 +72,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 	{
 		$categoryModel = $this->model->find($entity->id());
 		if (!$categoryModel) {
-			throw new \Exception('Category not found');
+			throw new NotFoundException("Category id: {$entity->id()} not found");
 		}
 
 		$categoryModel->update([
@@ -81,6 +81,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 			'is_active' => $entity->isActive,
 			'updated_at' => $entity->updatedAt,
 		]);
+
+		$categoryModel->refresh();
 
 		return $this->toCategory($categoryModel);
 	}

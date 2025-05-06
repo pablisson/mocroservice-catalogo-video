@@ -99,7 +99,6 @@ class CategoryRepositoryTeste extends TestCase
 	{
 		try {
 			$invalidEntity = new EntityCategory(
-				id: 'fake-id',
 				name: 'Test Category',
 				description: 'Test Description',
 				isActive: true,
@@ -109,8 +108,8 @@ class CategoryRepositoryTeste extends TestCase
 
 			$this->assertTrue(false, 'Não estorou a exception');
 		} catch (Throwable $e) {
-			$this->assertTrue(true, 'Ocorreu uma exception');
-			// $this->assertInstanceOf(NotFoundException::class, $e);
+			$this->assertTrue(true);
+			$this->assertInstanceOf(NotFoundException::class, $e);
 		}
 	}
 
@@ -127,6 +126,7 @@ class CategoryRepositoryTeste extends TestCase
 		$response = $this->repository->update($entity);
 
 		$this->assertInstanceOf(EntityCategory::class, $response);
+		$this->assertNotEquals($categoryModel->name, $entity->name);
 		$this->assertEquals($categoryModel->id, $response->id());
 	}
 	
