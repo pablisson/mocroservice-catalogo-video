@@ -58,17 +58,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 
 	public function paginate(string $filter = '', string $order='DESC', int $page = 1, int $totalPage = 15): PaginationInterface
 	{
-
-		return new PaginationPresenter(
-			items: [],
-			total: 0,
-			lastPage: 1,
-			firstPage: 1,
-			currentPage: $page,
-			perPage: $totalPage,
-			to: 0,
-			from: 0
-		);
+		$query = $this->model;
+		if ($filter) {
+			$query->where('name', 'LIKE', "%{$filter}%");
+		}
+		$query->orderBy('created_at', $order);
+		$paginator = $query->paginate();
+		
+		return new PaginationPresenter($paginator);
 	}
 
 	public function update(EntityCategory $entity): EntityCategory

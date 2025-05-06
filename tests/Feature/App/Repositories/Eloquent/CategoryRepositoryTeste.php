@@ -80,7 +80,7 @@ class CategoryRepositoryTeste extends TestCase
 	{
 		$categories = CategoryModel::factory()->count(20)->create();
 		$response = $this->repository->paginate();
-
+		
 		$this->assertInstanceOf(PaginationInterface::class, $response);
 		$this->assertEquals(20, $response->total());
 		$this->assertCount(15, $response->items());
