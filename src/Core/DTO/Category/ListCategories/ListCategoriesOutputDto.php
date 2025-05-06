@@ -8,7 +8,7 @@ class ListCategoriesOutputDto
 {
 	public function __construct(
 		/**
-		 * @return stdClass[]|Category[]
+		 * @return stdClass[]|Category[]|array
 		 */
 		public array $items,	
 		public int $total,
