@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
         return [
 			'id' => (string) Str::uuid(),
             'name' => fake()->name(),
-			'description' => fake()->sentence(100),
+			'description' => fake()->sentence(30),
 			'is_active' => true,
         ];
     }

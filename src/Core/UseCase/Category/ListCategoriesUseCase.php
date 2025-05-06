@@ -23,7 +23,7 @@ class ListCategoriesUseCase
 		);
 
 		return new ListCategoriesOutputDto(
-			items: $categories->items(),
+			items: 	(array) $categories->items(),
 			total: $categories->total(),
 			last_page: $categories->lastPage(),
 			first_page: $categories->firstPage(),
