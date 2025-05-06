@@ -26,10 +26,8 @@ class CreateCategoryUseCaseTest extends TestCase
 
 		$this->assertEquals('Test Category', $responseUseCase->name);
 		$this->assertNotEmpty($responseUseCase->id);
-
 		$this->assertDatabaseHas('categories', [
 			'id' => $responseUseCase->id,
 		]);
-
     }
 }
