@@ -99,9 +99,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
 	public function toCategory(object $object): EntityCategory
 	{
-		return new EntityCategory(
+		$entity = new EntityCategory(
 			id: $object->id,
-			name: $object->name
+			name: $object->name,
+			description: $object->description,
 		);
+		(bool) $object->is_active ? $entity->activate() : $entity->deactivate();
+		return $entity;
 	}
 }
