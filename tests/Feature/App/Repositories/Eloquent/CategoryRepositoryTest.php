@@ -11,7 +11,7 @@ use Core\Domain\Repository\PaginationInterface;
 use Tests\Unit\TestCase;
 use Throwable;
 
-class CategoryRepositoryTeste extends TestCase
+class CategoryRepositoryTest extends TestCase
 {
 	protected $repository;
 	protected function setUp(): void
@@ -128,6 +128,25 @@ class CategoryRepositoryTeste extends TestCase
 		$this->assertInstanceOf(EntityCategory::class, $response);
 		$this->assertNotEquals($categoryModel->name, $entity->name);
 		$this->assertEquals($categoryModel->id, $response->id());
+	}
+	
+	public function test_delete(): void
+	{
+		$categoryModel = CategoryModel::factory()->create();
+		$response = $this->repository->delete($categoryModel->id);
+		$this->assertTrue($response);
+	}
+
+	
+	public function test_delete_not_found(): void
+	{
+		try {
+			$this->repository->delete('fake-id');
+
+			$this->assertTrue(false, 'Não estourou a exception');
+		} catch (Throwable $e) {
+			$this->assertInstanceOf(NotFoundException::class, $e);
+		}
 	}
 	
 }
