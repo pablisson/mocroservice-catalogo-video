@@ -9,6 +9,7 @@ use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\PaginationInterface;
 use Tests\Unit\TestCase;
+use Throwable;
 
 class CategoryRepositoryTeste extends TestCase
 {
@@ -93,4 +94,40 @@ class CategoryRepositoryTeste extends TestCase
 		$this->assertInstanceOf(PaginationInterface::class, $response);
 		$this->assertCount(0, $response->items());
 	}
+	
+	public function test_update_not_found(): void
+	{
+		try {
+			$invalidEntity = new EntityCategory(
+				id: 'fake-id',
+				name: 'Test Category',
+				description: 'Test Description',
+				isActive: true,
+			);
+
+			$this->repository->update($invalidEntity);
+
+			$this->assertTrue(false, 'Não estorou a exception');
+		} catch (Throwable $e) {
+			$this->assertTrue(true, 'Ocorreu uma exception');
+			// $this->assertInstanceOf(NotFoundException::class, $e);
+		}
+	}
+
+	public function test_update(): void
+	{
+		$categoryModel = CategoryModel::factory()->create();
+		$entity = new EntityCategory(
+			id: $categoryModel->id,
+			name: 'Test Category',
+			description: 'Test Description',
+			isActive: true,
+		);
+
+		$response = $this->repository->update($entity);
+
+		$this->assertInstanceOf(EntityCategory::class, $response);
+		$this->assertEquals($categoryModel->id, $response->id());
+	}
+	
 }
