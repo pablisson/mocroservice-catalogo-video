@@ -7,6 +7,7 @@ use App\Repositories\Eloquent\CategoryRepository;
 use Core\Domain\Entity\Category as EntityCategory;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
+use Core\Domain\Repository\PaginationInterface;
 use Tests\Unit\TestCase;
 
 class CategoryRepositoryTeste extends TestCase
@@ -73,5 +74,15 @@ class CategoryRepositoryTeste extends TestCase
 		// $this->assertCount(10, $response);
 		$this->assertEquals(count($categories), count($response));
 
+	}
+
+	public function test_paginate(): void
+	{
+		$categories = CategoryModel::factory()->count(20)->create();
+		$response = $this->repository->paginate();
+
+		$this->assertInstanceOf(PaginationInterface::class, $response);
+		$this->assertEquals(20, $response->total());
+		$this->assertCount(15, $response->items());
 	}
 }
