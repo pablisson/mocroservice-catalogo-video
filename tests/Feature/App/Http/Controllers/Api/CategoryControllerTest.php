@@ -53,15 +53,13 @@ class CategoryControllerTest extends TestCase
 			'name' => 'Test Category',
 			'description' => 'Test Description',
 		]);
+		
 		// $request->headers->set('content-type', 'application/json');
-		// $request->headers->set('accept', 'application/json');
-		// $request->setJson('{"name":"Test Category","description":"Test Description"}');
 
 		$response = $this->controller->store(
 			$request,
 			$useCase
 		);
-		// dump($response);
 		$this->assertInstanceOf(JsonResponse::class, $response);
 		$this->assertEquals(Response::HTTP_CREATED, $response->status());
 	}
