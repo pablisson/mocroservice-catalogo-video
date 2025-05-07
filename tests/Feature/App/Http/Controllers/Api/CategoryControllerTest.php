@@ -2,24 +2,30 @@
 
 namespace Tests\Feature\App\Http\Controllers\Api;
 
+use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Controllers\Api\CategoryController;
 use App\Models\Category;
 use App\Repositories\Eloquent\CategoryRepository;
+use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Mockery\Mock;
+use Illuminate\Http\Response;
+use Illuminate\Support\Js;
 use Tests\Unit\TestCase;
 
 class CategoryControllerTest extends TestCase
 {
 	protected CategoryRepository $repository;
+	protected CategoryController $controller; 
 
 	protected function setUp(): void
 	{
 		$this->repository = new CategoryRepository(
 			new Category()
 		);
+		$this->controller = new CategoryController();
 		parent::setUp();
 	}
 	
@@ -30,8 +36,7 @@ class CategoryControllerTest extends TestCase
     {
 		$useCase = new ListCategoriesUseCase($this->repository);
 
-		$controller = new CategoryController();
-		$response = $controller->index(
+		$response = $this->controller->index(
 			request: new Request(),
 			useCase: $useCase
 		);
@@ -39,5 +44,25 @@ class CategoryControllerTest extends TestCase
 		$this->assertInstanceOf(AnonymousResourceCollection::class, $response);
 		$this->assertArrayHasKey('meta', $response->additional);
 
+	}
+
+	public function test_store()
+	{
+		$useCase = new CreateCategoryUseCase($this->repository);
+		$request = new StoreCategoryRequest([
+			'name' => 'Test Category',
+			'description' => 'Test Description',
+		]);
+		// $request->headers->set('content-type', 'application/json');
+		// $request->headers->set('accept', 'application/json');
+		// $request->setJson('{"name":"Test Category","description":"Test Description"}');
+
+		$response = $this->controller->store(
+			$request,
+			$useCase
+		);
+		// dump($response);
+		$this->assertInstanceOf(JsonResponse::class, $response);
+		$this->assertEquals(Response::HTTP_CREATED, $response->status());
 	}
 }
