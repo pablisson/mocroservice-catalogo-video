@@ -49,5 +49,7 @@ class ListCategoryUseCaseUnitTest extends TestCase
 		$useCase = new ListCategoryUseCase($spy);
 		$responseUseCase = $useCase->execute($mockInputDto);
 		$spy->shouldHaveReceived('findById');
+
+		Mockery::close();
 	}
 }

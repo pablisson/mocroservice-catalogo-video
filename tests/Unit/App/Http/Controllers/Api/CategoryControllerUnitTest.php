@@ -8,6 +8,7 @@ use Core\DTO\Category\ListCategories\ListCategoriesOutputDto;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Illuminate\Http\Request;
 use Mockery;
+use Mockery\Mock;
 
 class CategoryControllerUnitTest extends TestCase
 {
@@ -38,5 +39,7 @@ class CategoryControllerUnitTest extends TestCase
 		$mockUseCaseSpy->shouldReceive('execute')->andReturn($mockDTOOutput);
 		$controller->index($mockRequest, $mockUseCaseSpy);
 		$mockUseCaseSpy->shouldHaveReceived('execute');
+
+		Mockery::close();
     }
 }

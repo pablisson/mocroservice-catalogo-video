@@ -6,7 +6,6 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\DTO\Category\DeleteCategories\DeleteCategoryInputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoryOutputDto;
 use DateTime;
-use Mockery;
 
 class DeleteCategoryUseCase 
 {
