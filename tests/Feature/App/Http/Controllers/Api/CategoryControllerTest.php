@@ -100,4 +100,17 @@ class CategoryControllerTest extends TestCase
 			'name' => 'Updated Category',
 		]);
 	}
+
+	public function test_delete()
+	{
+		$category = Category::factory()->create();
+		
+		$response = $this->deleteJson(route('category.destroy', ['category' => $category->id]));
+		$response->assertStatus(Response::HTTP_NO_CONTENT);
+
+		$this->assertDatabaseMissing('categories', [
+			'id' => $category->id,
+		]);
+	}
+
 }

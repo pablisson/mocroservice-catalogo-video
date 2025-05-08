@@ -9,9 +9,11 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Core\DTO\Category\CategoryInputDto;
 use Core\DTO\Category\CreateCategory\CreateCategoryInputDto;
+use Core\DTO\Category\DeleteCategories\DeleteCategoryInputDto;
 use Core\DTO\Category\ListCategories\ListCategoriesInputDto;
 use Core\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
 use Core\UseCase\Category\CreateCategoryUseCase;
+use Core\UseCase\Category\DeleteCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
 use Core\UseCase\Category\UpdateCategoryUseCase;
@@ -92,4 +94,14 @@ class CategoryController extends Controller
 			->setStatusCode(Response::HTTP_OK);
 	}
 
+	public function destroy(DeleteCategoryUseCase $useCase,$id)
+	{
+		$response = $useCase->execute(
+			inputDto: new DeleteCategoryInputDto(id: $id)
+		);
+
+		dump($response);
+		
+		return response()->json(null, Response::HTTP_NO_CONTENT);
+	}
 }
