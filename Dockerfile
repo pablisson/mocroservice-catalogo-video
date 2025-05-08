@@ -48,6 +48,10 @@ RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
+RUN echo 'export HISTFILE=/home/devcontainer/.bash_history' >> /home/devcontainer/.bashrc \
+    && echo 'PROMPT_COMMAND="history -a; $PROMPT_COMMAND"' >> /home/devcontainer/.bashrc \
+    && chown devcontainer:devcontainer /home/devcontainer/.bash_history
+    
 USER devcontainer
 
 EXPOSE 9000
