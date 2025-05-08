@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Core\DTO\Category\CategoryInputDto;
 use Core\DTO\Category\CreateCategory\CreateCategoryInputDto;
 use Core\DTO\Category\ListCategories\ListCategoriesInputDto;
+use Core\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
-use Illuminate\Http\Request;
+use Core\UseCase\Category\UpdateCategoryUseCase;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+
 
 class CategoryController extends Controller
 {
@@ -66,6 +70,21 @@ class CategoryController extends Controller
 	{
 		$response = $useCase->execute(
 			input: new CategoryInputDto(id: $id)
+		);
+		
+		return (new CategoryResource(collect($response)))
+			->response()
+			->setStatusCode(Response::HTTP_OK);
+	}
+
+	public function update(UpdateCategoryRequest $request, UpdateCategoryUseCase $useCase, $id)
+	{	
+		$response = $useCase->execute(
+			inputDto: new UpdateCategoryInputDto(
+				id: $id,
+				name: $request->name ?? '',
+				description: $request->description ?? '',
+			)
 		);
 		
 		return (new CategoryResource(collect($response)))

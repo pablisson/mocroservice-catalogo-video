@@ -3,18 +3,22 @@
 namespace Tests\Feature\App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Api\CategoryController;
 use App\Models\Category;
 use App\Repositories\Eloquent\CategoryRepository;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
+use Core\UseCase\Category\UpdateCategoryUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Js;
+use Mockery;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\Unit\TestCase;
+
 
 class CategoryControllerTest extends TestCase
 {
@@ -77,6 +81,23 @@ class CategoryControllerTest extends TestCase
 
 		$this->assertInstanceOf(JsonResponse::class, $response);
 		$this->assertEquals(Response::HTTP_OK, $response->status());
-		
+	}
+
+
+	public function test_update()
+	{
+		$category = Category::factory()->create();
+
+		$payload = [
+			'name' => 'Updated Category',
+			'description' => 'Updated Description',
+		];
+
+		$response = $this->putJson(route('category.update', ['category' => $category->id]), $payload);
+		$response->assertStatus(Response::HTTP_OK);
+		$this->assertNotEquals($category->name, $response['data']['name']);
+		$response->assertJsonFragment([
+			'name' => 'Updated Category',
+		]);
 	}
 }
