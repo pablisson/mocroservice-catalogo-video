@@ -93,7 +93,7 @@ class CategoryControllerTest extends TestCase
 			'description' => 'Updated Description',
 		];
 
-		$response = $this->putJson(route('category.update', ['category' => $category->id]), $payload);
+		$response = $this->putJson(route('categories.update', ['category' => $category->id]), $payload);
 		$response->assertStatus(Response::HTTP_OK);
 		$this->assertNotEquals($category->name, $response['data']['name']);
 		$response->assertJsonFragment([
@@ -105,7 +105,7 @@ class CategoryControllerTest extends TestCase
 	{
 		$category = Category::factory()->create();
 		
-		$response = $this->deleteJson(route('category.destroy', ['category' => $category->id]));
+		$response = $this->deleteJson(route('categories.destroy', ['category' => $category->id]));
 		$response->assertStatus(Response::HTTP_NO_CONTENT);
 
 		$this->assertDatabaseMissing('categories', [
