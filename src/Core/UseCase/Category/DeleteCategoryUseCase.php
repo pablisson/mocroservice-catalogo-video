@@ -6,7 +6,6 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\DTO\Category\DeleteCategories\DeleteCategoryInputDto;
 use Core\DTO\Category\DeleteCategories\DeleteCategoryOutputDto;
 use DateTime;
-use Mockery;
 
 class DeleteCategoryUseCase 
 {
@@ -18,12 +17,13 @@ class DeleteCategoryUseCase
 
 	public function execute(DeleteCategoryInputDto $inputDto): DeleteCategoryOutputDto
 	{
-		/*
+		
 		$category = $this->repository->findById($inputDto->id);
+		
 		if (!$category) {
 			throw new \Exception('Category not found');
 		}
-		*/
+		
 		$dateNow = new DateTime();
 
 		$wasDeleted = $this->repository->delete($inputDto->id);

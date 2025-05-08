@@ -5,6 +5,7 @@ services:
         volumes:
             - .:/var/www
             - ./.docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+            - ./.docker/history/bash_history:/home/devcontainer/.bash_history 
         networks:
             - app-network
         depends_on:
