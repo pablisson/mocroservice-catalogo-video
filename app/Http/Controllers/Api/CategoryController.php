@@ -99,8 +99,6 @@ class CategoryController extends Controller
 		$response = $useCase->execute(
 			inputDto: new DeleteCategoryInputDto(id: $id)
 		);
-
-		dump($response);
 		
 		return response()->json(null, Response::HTTP_NO_CONTENT);
 	}
