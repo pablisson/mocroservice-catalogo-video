@@ -43,7 +43,8 @@
       "extensions": [
         "calebporzio.better-phpunit",
         "bmewburn.vscode-intelephense-client",
-        "amiralizadeh9480.laravel-extra-intellisense"
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "mhutchie.git-graph"
       ]
     }
   }
