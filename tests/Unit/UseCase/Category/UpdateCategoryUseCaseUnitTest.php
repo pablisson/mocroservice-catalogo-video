@@ -8,6 +8,7 @@ use Core\DTO\Category\UpdateCategory\UpdateCategoryInputDto;
 use Core\DTO\Category\UpdateCategory\UpdateCategoryOutputDto;
 use Core\UseCase\Category\UpdateCategoryUseCase;
 use Mockery;
+use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -65,5 +66,7 @@ class UpdateCategoryUseCaseUnitTest extends TestCase
         $useCase->execute($mockInputDto);
         $spy->shouldHaveReceived('findById');
         $spy->shouldHaveReceived('update');
+
+		Mockery::close();
 	}
 }

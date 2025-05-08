@@ -3,6 +3,17 @@
 namespace Core\Domain\Repository;
 
 /**
+ * Interface EntityRepositoryInterface
+ *
+ * @package Core\Domain\Repository
+ * @pablisson
+ * Esta interface define os métodos básicos para manipulação de entidades
+ * em um repositório. Ela é genérica e pode ser utilizada para qualquer tipo 
+ * de entidade. Foi criada com o intuito de substituir a categoryRepositoryInterface
+ * @author  Páblisson Araújo <
+*/
+
+/**
  * @template T
  */
 interface EntityRepositoryInterface
