@@ -25,7 +25,7 @@ class Category
 		protected DateTime|string $deletedAt = '',
 		protected DateTime|string $updatedAt = '',
 	) {
-		$this->id = $this->id ? new Uuid($this->id) : Uuid::random();
+		$this->id = $this->id ? (new Uuid($this->id))->uuid() : Uuid::random();
 		$this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
 		$this->validate();
 	}

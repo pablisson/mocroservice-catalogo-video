@@ -19,11 +19,11 @@ class DeleteCategoryUseCase
 	{
 		
 		$category = $this->repository->findById($inputDto->id);
-		
+		/*
 		if (!$category) {
 			throw new \Exception('Category not found');
 		}
-		
+		*/
 		$dateNow = new DateTime();
 
 		$wasDeleted = $this->repository->delete($inputDto->id);

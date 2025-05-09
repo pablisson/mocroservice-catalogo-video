@@ -23,6 +23,11 @@ class Uuid
 		return $this->value;
 	}
 
+	public function uuid(): string
+	{
+		return $this->value;
+	}
+
 	private function ensureIsValid(string $value)
 	{
 		if (!RamseyUuid::isValid($value)){
