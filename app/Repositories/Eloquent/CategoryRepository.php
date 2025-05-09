@@ -32,7 +32,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 	{
 		$categoryModel = $this->model->find($id);
 		if (!$categoryModel) {
-			throw new NotFoundException();
+			throw new NotFoundException("Category id: {$id} not found");
 		}
 		
 		return $this->toCategory($categoryModel);

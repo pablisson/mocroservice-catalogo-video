@@ -59,17 +59,15 @@ class CategoryApiTest extends TestCase
 		$this->assertEquals($response['meta']['current_page'], 2);
 	}
 
-	public function list_category_notfound(): void
+	public function test_list_category_not_found(): void
 	{
 		$category = Category::factory()->create();
 		$uuid = Uuid::uuid4()->toString();
-		
+
 		$response = $this->getJson("$this->endpoint/{$uuid}");
-		$response->dump();
 		$response->assertStatus(Response::HTTP_NOT_FOUND);
 		$response->assertJson([
-			'message' => 'Category not found',
-			'status_code' => Response::HTTP_NOT_FOUND
+			'message' => "Category id: {$uuid} not found"
 		]);
 
 	}
