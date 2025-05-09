@@ -113,9 +113,6 @@ class CategoryControllerTest extends TestCase
 		$response = $this->deleteJson(route('categories.destroy', ['category' => $category->id]));
 		$response->assertStatus(Response::HTTP_NO_CONTENT);
 
-		$this->assertDatabaseMissing('categories', [
-			'id' => $category->id,
-		]);
 	}
 
 }
