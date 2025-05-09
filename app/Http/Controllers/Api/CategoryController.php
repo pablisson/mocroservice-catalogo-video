@@ -89,7 +89,7 @@ class CategoryController extends Controller
 			)
 		);
 		
-		return (new CategoryResource(collect($response)))
+		return (new CategoryResource($response))
 			->response()
 			->setStatusCode(Response::HTTP_OK);
 	}
