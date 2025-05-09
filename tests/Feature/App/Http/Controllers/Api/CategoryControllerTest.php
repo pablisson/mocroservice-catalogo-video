@@ -11,6 +11,7 @@ use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
 use Core\UseCase\Category\UpdateCategoryUseCase;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -52,33 +53,28 @@ class CategoryControllerTest extends TestCase
 	}
 
 	public function test_store()
-	{
-		$useCase = new CreateCategoryUseCase($this->repository);
-		$request = new StoreCategoryRequest([
-			'name' => 'Test Category',
-			'description' => 'Test Description',
-		]);
-		
-		// $request->headers->set('content-type', 'application/json');
+	{		
+		$payload = [
+			'name' => 'New Category',
+			'description' => 'New Description',
+		];
 
-		$response = $this->controller->store(
-			$request,
-			$useCase
-		);
-		$this->assertInstanceOf(JsonResponse::class, $response);
+		$response = $this->postJson(route('categories.store'), $payload);
+		$response->assertStatus(Response::HTTP_CREATED);
+		$this->assertEquals($payload['name'], $response['data']['name']);
 		$this->assertEquals(Response::HTTP_CREATED, $response->status());
 	}
 
 	public function test_show()
 	{
 		$category = Category::factory()->create();
-		$useCase = new ListCategoryUseCase($this->repository);		
-		
+				$useCase = new ListCategoryUseCase($this->repository);		
+
 		$response = $this->controller->show(
 			id: $category->id,
 			useCase: $useCase
 		);
-
+		
 		$this->assertInstanceOf(JsonResponse::class, $response);
 		$this->assertEquals(Response::HTTP_OK, $response->status());
 	}
