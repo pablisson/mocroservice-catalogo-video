@@ -68,14 +68,23 @@ class CategoryControllerTest extends TestCase
 	public function test_show()
 	{
 		$category = Category::factory()->create();
-				$useCase = new ListCategoryUseCase($this->repository);		
-
-		$response = $this->controller->show(
-			id: $category->id,
-			useCase: $useCase
-		);
+		$response = $this->getJson(route('categories.show', ['category' => $category->id]));
 		
-		$this->assertInstanceOf(JsonResponse::class, $response);
+		$response->assertJsonStructure(
+			[
+				'data' => [
+						'id',
+						'name',
+						'description',
+						'created_at',
+						'updated_at',
+						'deleted_at',
+						'is_active'
+				]
+			]
+		);		
+		$this->assertEquals($category->id, $response['data']['id']);
+		$this->assertEquals($response['data']['name'], $response['data']['name']);
 		$this->assertEquals(Response::HTTP_OK, $response->status());
 	}
 

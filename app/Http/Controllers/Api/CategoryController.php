@@ -70,12 +70,11 @@ class CategoryController extends Controller
 	 */
 	public function show(ListCategoryUseCase $useCase,  $id)
 	{
-		dump($id);
 		$response = $useCase->execute(
 			input: new CategoryInputDto(id: $id)
 		);
 		
-		return (new CategoryResource(collect($response)))
+		return (new CategoryResource($response))
 			->response()
 			->setStatusCode(Response::HTTP_OK);
 	}

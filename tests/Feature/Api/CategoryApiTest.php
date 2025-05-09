@@ -5,6 +5,8 @@ namespace Tests\Feature\Api;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
+use Ramsey\Uuid\Uuid;
 use Tests\Unit\TestCase;
 
 class CategoryApiTest extends TestCase
@@ -55,5 +57,20 @@ class CategoryApiTest extends TestCase
 		$response = $this->getJson("$this->endpoint?page=2");
 		$response->assertStatus(200);
 		$this->assertEquals($response['meta']['current_page'], 2);
+	}
+
+	public function list_category_notfound(): void
+	{
+		$category = Category::factory()->create();
+		$uuid = Uuid::uuid4()->toString();
+		
+		$response = $this->getJson("$this->endpoint/{$uuid}");
+		$response->dump();
+		$response->assertStatus(Response::HTTP_NOT_FOUND);
+		$response->assertJson([
+			'message' => 'Category not found',
+			'status_code' => Response::HTTP_NOT_FOUND
+		]);
+
 	}
 }
