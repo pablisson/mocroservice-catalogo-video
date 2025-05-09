@@ -60,7 +60,7 @@ class CategoryController extends Controller
 				
 			)
 		);
-		return (new CategoryResource(collect($response)))
+		return (new CategoryResource($response))
 			->response()
 			->setStatusCode(Response::HTTP_CREATED);
 	}
@@ -74,7 +74,7 @@ class CategoryController extends Controller
 			input: new CategoryInputDto(id: $id)
 		);
 		
-		return (new CategoryResource(collect($response)))
+		return (new CategoryResource($response))
 			->response()
 			->setStatusCode(Response::HTTP_OK);
 	}
@@ -89,7 +89,7 @@ class CategoryController extends Controller
 			)
 		);
 		
-		return (new CategoryResource(collect($response)))
+		return (new CategoryResource($response))
 			->response()
 			->setStatusCode(Response::HTTP_OK);
 	}
@@ -99,8 +99,6 @@ class CategoryController extends Controller
 		$response = $useCase->execute(
 			inputDto: new DeleteCategoryInputDto(id: $id)
 		);
-
-		dump($response);
 		
 		return response()->json(null, Response::HTTP_NO_CONTENT);
 	}

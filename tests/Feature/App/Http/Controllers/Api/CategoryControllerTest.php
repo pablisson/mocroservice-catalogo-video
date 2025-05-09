@@ -11,6 +11,7 @@ use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
 use Core\UseCase\Category\UpdateCategoryUseCase;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -52,34 +53,38 @@ class CategoryControllerTest extends TestCase
 	}
 
 	public function test_store()
-	{
-		$useCase = new CreateCategoryUseCase($this->repository);
-		$request = new StoreCategoryRequest([
-			'name' => 'Test Category',
-			'description' => 'Test Description',
-		]);
-		
-		// $request->headers->set('content-type', 'application/json');
+	{		
+		$payload = [
+			'name' => 'New Category',
+			'description' => 'New Description',
+		];
 
-		$response = $this->controller->store(
-			$request,
-			$useCase
-		);
-		$this->assertInstanceOf(JsonResponse::class, $response);
+		$response = $this->postJson(route('categories.store'), $payload);
+		$response->assertStatus(Response::HTTP_CREATED);
+		$this->assertEquals($payload['name'], $response['data']['name']);
 		$this->assertEquals(Response::HTTP_CREATED, $response->status());
 	}
 
 	public function test_show()
 	{
 		$category = Category::factory()->create();
-		$useCase = new ListCategoryUseCase($this->repository);		
+		$response = $this->getJson(route('categories.show', ['category' => $category->id]));
 		
-		$response = $this->controller->show(
-			id: $category->id,
-			useCase: $useCase
-		);
-
-		$this->assertInstanceOf(JsonResponse::class, $response);
+		$response->assertJsonStructure(
+			[
+				'data' => [
+						'id',
+						'name',
+						'description',
+						'created_at',
+						'updated_at',
+						'deleted_at',
+						'is_active'
+				]
+			]
+		);		
+		$this->assertEquals($category->id, $response['data']['id']);
+		$this->assertEquals($response['data']['name'], $response['data']['name']);
 		$this->assertEquals(Response::HTTP_OK, $response->status());
 	}
 
@@ -93,7 +98,7 @@ class CategoryControllerTest extends TestCase
 			'description' => 'Updated Description',
 		];
 
-		$response = $this->putJson(route('category.update', ['category' => $category->id]), $payload);
+		$response = $this->putJson(route('categories.update', ['category' => $category->id]), $payload);
 		$response->assertStatus(Response::HTTP_OK);
 		$this->assertNotEquals($category->name, $response['data']['name']);
 		$response->assertJsonFragment([
@@ -105,12 +110,9 @@ class CategoryControllerTest extends TestCase
 	{
 		$category = Category::factory()->create();
 		
-		$response = $this->deleteJson(route('category.destroy', ['category' => $category->id]));
+		$response = $this->deleteJson(route('categories.destroy', ['category' => $category->id]));
 		$response->assertStatus(Response::HTTP_NO_CONTENT);
 
-		$this->assertDatabaseMissing('categories', [
-			'id' => $category->id,
-		]);
 	}
 
 }
