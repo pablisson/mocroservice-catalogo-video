@@ -61,7 +61,7 @@ class CategoryApiTest extends TestCase
 
 	public function test_list_category_not_found(): void
 	{
-		$category = Category::factory()->create();
+		Category::factory()->create();
 		$uuid = Uuid::uuid4()->toString();
 
 		$response = $this->getJson("$this->endpoint/{$uuid}");
@@ -70,5 +70,44 @@ class CategoryApiTest extends TestCase
 			'message' => "Category id: {$uuid} not found"
 		]);
 
+	}
+	public function test_list_category(): void
+	{
+		$category = Category::factory()->create();
+
+		$response = $this->getJson("$this->endpoint/{$category->id}");
+		$response->assertStatus(Response::HTTP_OK);
+		$response->assertJsonStructure(
+			[
+				'data' => [
+					'id',
+					'name',
+					'description',
+					'created_at',
+					'updated_at',
+					'deleted_at',
+					'is_active'
+				]
+			]
+		);
+
+		$this->assertEquals($category->id, $response['data']['id']);
+		$this->assertEquals($category->name, $response['data']['name']);
+		$this->assertEquals($category->description, $response['data']['description']);
+		
+	}
+
+	public function test_validation_store(): void
+	{
+		$data = [];
+		$response = $this->postJson($this->endpoint, $data);
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+		// dump($response->json());
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+			]
+		]);
 	}
 }
