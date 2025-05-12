@@ -99,15 +99,64 @@ class CategoryApiTest extends TestCase
 
 	public function test_validation_store(): void
 	{
-		$data = [];
-		$response = $this->postJson($this->endpoint, $data);
-		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-		// dump($response->json());
+		$response = $this->postJson($this->endpoint, []);
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);		
 		$response->assertJsonStructure([
 			'message',
 			'errors' => [
 				'name',
 			]
 		]);
+
+		$response = $this->postJson($this->endpoint, [
+			'name' => 'No',
+			'description' => 'De',
+		]);
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+				'description'
+			]
+		]);
+
+		$response = $this->postJson($this->endpoint, [
+			'name' => fake()->sentence(300),
+			'description' => fake()->sentence(300),
+		]);
+		
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+				'description'
+			]
+		]);
+
+	}
+
+	public function test_store(): void
+	{
+		$data = [
+			'name' => 'Nova Category Test',
+			'description' => 'Description Test',
+			'is_active' => true,
+		];
+		$response = $this->postJson($this->endpoint, $data);
+		$response->assertStatus(Response::HTTP_CREATED);		
+		$response->assertJsonStructure([
+			'data' => [
+				'id',
+				'name',
+				'description',
+				'created_at',
+				'updated_at',
+				'deleted_at',
+				'is_active'
+			]
+		]);
+		
 	}
 }
