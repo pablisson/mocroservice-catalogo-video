@@ -245,4 +245,28 @@ class CategoryApiTest extends TestCase
 		);
 		
 	}
+
+	public function test_not_found_delete(): void
+	{
+		$uuid = Uuid::uuid4()->toString();
+		$response = $this->deleteJson("$this->endpoint/{$uuid}");
+		$response->assertStatus(Response::HTTP_NOT_FOUND);
+		$response->assertJson([
+			'message' => "Category id: {$uuid} not found"
+		]);
+	}
+
+	public function test_delete(): void
+	{
+		$category = Category::factory()->create();
+		$response = $this->deleteJson("$this->endpoint/{$category->id}");
+		$response->assertStatus(Response::HTTP_NO_CONTENT);
+		$this->assertSoftDeleted(
+			'categories',
+			[
+				'id' => $category->id,
+			]
+		);
+		
+	}
 }
