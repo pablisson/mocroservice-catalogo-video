@@ -26,7 +26,7 @@ class CategoryApiTest extends TestCase
 
 	public function test_list_all_categories(): void
 	{
-		$categories = Category::factory()->count(30)->create();
+		$categories = Category::factory()->count(25)->create();
 		$response = $this->getJson($this->endpoint);
 		$response->assertStatus(200);
 		$response->assertJsonStructure(
