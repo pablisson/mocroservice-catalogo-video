@@ -125,7 +125,7 @@ class CategoryApiTest extends TestCase
 			'name' => fake()->sentence(300),
 			'description' => fake()->sentence(300),
 		]);
-		
+
 		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 		$response->assertJsonStructure([
 			'message',
@@ -157,6 +157,92 @@ class CategoryApiTest extends TestCase
 				'is_active'
 			]
 		]);
+		
+	}
+
+	public function test_not_found_update(): void
+	{
+		$uuid = Uuid::uuid4()->toString();
+		$response = $this->putJson("$this->endpoint/{$uuid}", [
+			'name' => 'Nova Categoria test',
+		]);
+		$response->assertStatus(Response::HTTP_NOT_FOUND);
+		$response->assertJson([
+			'message' => "Category id: {$uuid} not found"
+		]);
+	}
+
+	public function test_validation_update(): void
+	{
+		$category = Category::factory()->create();
+		$response = $this->putJson("$this->endpoint/{$category->id}", []);
+		
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);		
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+			]
+		]);
+
+		$response = $this->putJson("$this->endpoint/{$category->id}", [
+			'name' => 'No',
+			'description' => 'De',
+		]);
+		
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+				'description'
+			]
+		]);
+
+			$response = $this->postJson($this->endpoint, [
+			'name' => fake()->sentence(300),
+			'description' => fake()->sentence(300),
+		]);
+
+		$response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+		$response->assertJsonStructure([
+			'message',
+			'errors' => [
+				'name',
+				'description'
+			]
+		]);	
+	}
+
+	public function test_update(): void
+	{
+		$category = Category::factory()->create();
+		$data = [
+			'name' => 'Nova Category Test',
+			'description' => 'Description Test',
+			'is_active' => true,
+		];
+		$response = $this->putJson("$this->endpoint/{$category->id}", $data);
+		
+		$response->assertStatus(Response::HTTP_OK);		
+		$response->assertJsonStructure([
+			'data' => [
+				'id',
+				'name',
+				'description',
+				'created_at',
+				'updated_at',
+				'deleted_at',
+				'is_active'
+			]
+		]);
+		$this->assertDatabaseHas(
+			'categories',
+			[
+				'id' => $category->id,
+				'name' => $data['name'],
+			]
+		);
 		
 	}
 }
