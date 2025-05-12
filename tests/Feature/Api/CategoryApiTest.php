@@ -21,6 +21,7 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson($this->endpoint);
 
         $response->assertStatus(200);
+		$response->assertJsonCount(0, 'data');
     }
 
 	public function test_list_all_categories(): void
@@ -57,6 +58,7 @@ class CategoryApiTest extends TestCase
 		$response = $this->getJson("$this->endpoint?page=2");
 		$response->assertStatus(200);
 		$this->assertEquals($response['meta']['current_page'], 2);
+		$response->assertJsonCount(10, 'data');
 	}
 
 	public function test_list_category_not_found(): void
