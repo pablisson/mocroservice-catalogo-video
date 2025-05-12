@@ -7,3 +7,4 @@
 .ssh
 .vscode-server
 .vscode
+.docker/history/bash_history
