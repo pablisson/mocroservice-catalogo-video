@@ -28,6 +28,7 @@ class GenreUnitTest extends TestCase
 			description: 'Description of the new genre',
 			isActive: true,
 			createdAt: $this->date,
+			categoriesId: [],
 		);
 
 		parent::setUp();
@@ -99,20 +100,22 @@ class GenreUnitTest extends TestCase
 		$this->genre->update(name: 'N');
 	}
 
-		public function test_add_category_to_genre()
+	public function test_add_category_to_genre()
 	{
 		$category1 = new Category(name: 'Category 1');
 		$category2 = new Category(name: 'Category 2');
 
-		$this->genre->categoriesId = [];
-		$this->assertIsArray($this->genre->categoriesId);
-		$this->assertCount(0, $this->genre->categoriesId);
+		$this->assertIsArray($this->genre->categoriesId());
+		$this->assertCount(0, $this->genre->categoriesId());
 
 		$this->genre->addCategory(categoryId: $category1->id());
 		$this->genre->addCategory(categoryId: $category2->id());
 
-		$this->assertCount(2, $this->genre->categoriesId);
-
+		$this->assertCount(2, $this->genre->categoriesId());
 		
+		$this->genre->addCategory(categoryId: $category1->id());
+		$this->assertCount(2, $this->genre->categoriesId());
 	}
+
+
 }

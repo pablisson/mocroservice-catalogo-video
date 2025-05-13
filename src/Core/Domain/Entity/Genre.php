@@ -12,7 +12,6 @@ class Genre
 {
 	use Traits\MethodsMagicsTrait, EntityBase;
 
-	public array $categoriesId = [];
 	/**
 	 * @param string $id
 	 * @param string $name
@@ -27,6 +26,7 @@ class Genre
 		protected ?DateTime $createdAt = null,
 		protected ?DateTime $deletedAt = null,
 		protected ?DateTime $updatedAt = null,
+		protected array $categoriesId = [],
 	) {
 		$this->id = $this->id ?? Uuid::random();
 		$this->createdAt = $this->createdAt ?? new DateTime();
@@ -35,12 +35,15 @@ class Genre
 
 	public function addCategory(string $categoryId): void
 	{
-		// if ($this->hasCategory($categoryId)) {
-		// 	throw new EntityValidationException('A categoria já está associada a este gênero.');
-		// }
-
-		array_push($this->categoriesId, $categoryId);
-		
+		if(!in_array($categoryId, $this->categoriesId)) {
+			array_push($this->categoriesId, $categoryId);			
+		}
 	}
+
+	public function categoriesId(): array
+	{
+		return $this->categoriesId;
+	}
+
 
 }
