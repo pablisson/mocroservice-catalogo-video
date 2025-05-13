@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Domain\Entity;
 
+use Core\Domain\Entity\Category;
 use PHPUnit\Framework\TestCase;
 use Core\Domain\Entity\Genre;
 use Core\Domain\Exception\EntityValidationException;
@@ -96,5 +97,22 @@ class GenreUnitTest extends TestCase
 	{
 		$this->expectException(EntityValidationException::class);
 		$this->genre->update(name: 'N');
+	}
+
+		public function test_add_category_to_genre()
+	{
+		$category1 = new Category(name: 'Category 1');
+		$category2 = new Category(name: 'Category 2');
+
+		$this->genre->categoriesId = [];
+		$this->assertIsArray($this->genre->categoriesId);
+		$this->assertCount(0, $this->genre->categoriesId);
+
+		$this->genre->addCategory(categoryId: $category1->id());
+		$this->genre->addCategory(categoryId: $category2->id());
+
+		$this->assertCount(2, $this->genre->categoriesId);
+
+		
 	}
 }
