@@ -2,6 +2,7 @@
 
 namespace Core\Domain\Entity;
 
+use Core\Domain\Entity\Traits\EntityBase;
 use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Uuid;
@@ -9,7 +10,7 @@ use DateTime;
 
 class Category
 {
-	use Traits\MethodsMagicsTrait;
+	use Traits\MethodsMagicsTrait, EntityBase;
 	/**
 	 * @param string $id
 	 * @param string $name
@@ -29,33 +30,5 @@ class Category
 		$this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
 		$this->validate();
 	}
-	
-	public function deactivate(): void 
-	{
-		$this->isActive = false;
-	}
 
-	public function activate(): void 
-	{
-		$this->isActive = true;
-	}
-
-	public function update(string $name, string $description): void
-	{
-		$this->name = $name;
-		$this->description = $description;
-	}
-
-	public function delete(): void
-	{
-		$this->deletedAt = new DateTime();
-	}
-
-	private function validate(): void
-	{
-		DomainValidation::str_max_length($this->name);
-		DomainValidation::str_min_length($this->name);
-		DomainValidation::str_can_null_and_max_length($this->description);
-		
-	}
 }

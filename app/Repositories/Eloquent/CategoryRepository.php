@@ -15,7 +15,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 	{
 	}
 	
-	public function insert(EntityCategory $entity): EntityCategory
+	public function insert($entity): EntityCategory
 	{
 		$categoryModel = $this->model->create([
 			'id' => $entity->id(),
@@ -68,7 +68,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 		return new PaginationPresenter($paginator);
 	}
 
-	public function update(EntityCategory $entity): EntityCategory
+	public function update($entity): EntityCategory
 	{
 		$categoryModel = $this->model->find($entity->id());
 		if (!$categoryModel) {
