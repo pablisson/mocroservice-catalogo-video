@@ -2,12 +2,13 @@
 
 namespace Core\Domain\Entity;
 
+use Core\Domain\Entity\Traits\EntityBase;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 
 class Genre
 {
-	use Traits\MethodsMagicsTrait;
+	use Traits\MethodsMagicsTrait, EntityBase;
 	/**
 	 * @param string $id
 	 * @param string $name
