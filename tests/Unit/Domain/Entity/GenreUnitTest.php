@@ -4,60 +4,59 @@ namespace Tests\Unit\Domain\Entity;
 
 use PHPUnit\Framework\TestCase;
 use Core\Domain\Entity\Genre;
+use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
+use Dom\Entity;
+use Illuminate\Support\Facades\Date;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class GenreUnitTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
-    public function test_attributes(): void
-    {
-		$uuid = (string)RamseyUuid::uuid4();
-		$date = new DateTime(date('Y-m-d H:i:s'));
-        $genre = new Genre(
-			id: new Uuid($uuid), 
+	private Genre $genre;
+	private string $uuid;
+	private DateTime $date;
+	protected function setUp(): void
+	{
+		$this->uuid = (string)RamseyUuid::uuid4();
+		$this->date = new DateTime(date('Y-m-d H:i:s'));
+
+		$this->genre = new Genre(
 			name: 'New Genre',
+			id: new Uuid($this->uuid),
 			description: 'Description of the new genre',
 			isActive: true,
-			createdAt: $date,
+			createdAt: $this->date,
 		);
 
-		$this->assertEquals($uuid, $genre->id());
-		$this->assertEquals('New Genre', $genre->name);
-		$this->assertEquals('Description of the new genre', $genre->description);
-		$this->assertEquals(true, $genre->isActive);
-		$this->assertEquals(date('Y-m-d H:i:s'), $genre->createdAt('Y-m-d H:i:s'));
+		parent::setUp();
+	}
+    public function test_attributes(): void
+    {
+
+		$this->assertEquals($this->uuid, $this->genre->id());
+		$this->assertEquals('New Genre', $this->genre->name);
+		$this->assertEquals('Description of the new genre', $this->genre->description);
+		$this->assertEquals(true, $this->genre->isActive);
+		$this->assertEquals(date('Y-m-d H:i:s'), $this->genre->createdAt('Y-m-d H:i:s'));
     }
 
 	public function test_attributes_create(): void
 	{
-		$genre = new Genre(
-			name: 'New Genre',
-			description: 'Description of the new genre',
-			isActive: true,
-		);
 
-		$this->assertEquals('New Genre', $genre->name);
-		$this->assertEquals('Description of the new genre', $genre->description);
-		$this->assertEquals(true, $genre->isActive);
-		$this->assertNotNull($genre->id());
-		$this->assertNotNull($genre->createdAt());
+		$this->assertEquals('New Genre', $this->genre->name);
+		$this->assertEquals('Description of the new genre', $this->genre->description);
+		$this->assertEquals(true, $this->genre->isActive);
+		$this->assertNotNull($this->genre->id());
+		$this->assertNotNull($this->genre->createdAt());
 	}
 
 	public function test_deactivate(): void
 	{
-		$genre = new Genre(
-			name: 'New Genre',
-			description: 'Description of the new genre',
-			isActive: true,
-		);
 
-		$this->assertTrue($genre->isActive);
-		$genre->deactivate();
-		$this->assertFalse($genre->isActive);
+		$this->assertTrue($this->genre->isActive);
+		$this->genre->deactivate();
+		$this->assertFalse($this->genre->isActive);
 	}
 	public function test_activate(): void
 	{
@@ -74,18 +73,28 @@ class GenreUnitTest extends TestCase
 
 	public function test_update(): void
 	{
-		$genre = new Genre(
-			name: 'New Genre',
-			description: 'Description of the new genre',
-			isActive: true,
+
+		$this->assertEquals('New Genre', $this->genre->name);
+		$this->assertEquals('Description of the new genre', $this->genre->description);
+
+		$this->genre->update('Updated Genre', 'Updated description');
+
+		$this->assertEquals('Updated Genre', $this->genre->name);
+		$this->assertEquals('Updated description', $this->genre->description);
+	}
+
+	public function test_entity_exception()
+	{
+		$this->expectException(EntityValidationException::class);
+		
+		new Genre(
+			name: 'N'
 		);
+	}
 
-		$this->assertEquals('New Genre', $genre->name);
-		$this->assertEquals('Description of the new genre', $genre->description);
-
-		$genre->update('Updated Genre', 'Updated description');
-
-		$this->assertEquals('Updated Genre', $genre->name);
-		$this->assertEquals('Updated description', $genre->description);
+	public function test_entity_update_exception()
+	{
+		$this->expectException(EntityValidationException::class);
+		$this->genre->update(name: 'N');
 	}
 }

@@ -17,10 +17,12 @@ trait EntityBase
 		$this->isActive = true;
 	}
 
-	public function update(string $name, string $description): void
+	public function update(string $name, string | null $description = null): void
 	{
 		$this->name = $name;
-		$this->description = $description;
+		$this->description = $description ?? $this->description;
+
+		$this->validate();
 	}
 
 	public function delete(): void
