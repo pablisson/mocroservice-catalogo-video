@@ -46,4 +46,29 @@ class GenreUnitTest extends TestCase
 		$this->assertNotNull($genre->id());
 		$this->assertNotNull($genre->createdAt());
 	}
+
+	public function test_deactivate(): void
+	{
+		$genre = new Genre(
+			name: 'New Genre',
+			description: 'Description of the new genre',
+			isActive: true,
+		);
+
+		$this->assertTrue($genre->isActive);
+		$genre->deactivate();
+		$this->assertFalse($genre->isActive);
+	}
+	public function test_activate(): void
+	{
+		$genre = new Genre(
+			name: 'New Genre',
+			description: 'Description of the new genre',
+			isActive: false,
+		);
+
+		$this->assertFalse($genre->isActive);
+		$genre->activate();
+		$this->assertTrue($genre->isActive);
+	}
 }
