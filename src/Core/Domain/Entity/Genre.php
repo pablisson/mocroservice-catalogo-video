@@ -15,13 +15,13 @@ class Genre
 	 * @param bool $isActive
 	 */
 	public function __construct(
-		protected Uuid | null $id = null,
 		protected string $name,
+		protected ?Uuid $id = null,
 		protected string $description = '',
 		protected bool $isActive = true,
-		protected DateTime|null $createdAt = null,
-		protected DateTime|null $deletedAt = null,
-		protected DateTime|null $updatedAt = null,
+		protected ?DateTime $createdAt = null,
+		protected ?DateTime $deletedAt = null,
+		protected ?DateTime $updatedAt = null,
 	) {
 		$this->id = $this->id ?? Uuid::random();
 		$this->createdAt = $this->createdAt ?? new DateTime();
