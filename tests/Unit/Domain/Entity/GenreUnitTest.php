@@ -71,4 +71,21 @@ class GenreUnitTest extends TestCase
 		$genre->activate();
 		$this->assertTrue($genre->isActive);
 	}
+
+	public function test_update(): void
+	{
+		$genre = new Genre(
+			name: 'New Genre',
+			description: 'Description of the new genre',
+			isActive: true,
+		);
+
+		$this->assertEquals('New Genre', $genre->name);
+		$this->assertEquals('Description of the new genre', $genre->description);
+
+		$genre->update('Updated Genre', 'Updated description');
+
+		$this->assertEquals('Updated Genre', $genre->name);
+		$this->assertEquals('Updated description', $genre->description);
+	}
 }
