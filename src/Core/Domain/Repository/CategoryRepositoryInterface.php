@@ -3,14 +3,17 @@
 namespace Core\Domain\Repository;
 
 use Core\Domain\Entity\Category;
+/**
+ * Manterei a interface concreta da categoria para uma possível expansão futura
+ * além disso o uso dela em RepositoryServiceProvider ajuda na injeção de 
+ * dependências.
+ */
 
-interface CategoryRepositoryInterface
+
+/**
+ * @extends EntityRepositoryInterface<Category>
+ */
+interface CategoryRepositoryInterface extends EntityRepositoryInterface
 {
-	public function insert(Category $category): Category;
-	public function findById(string $id): ?Category;
-	public function findAll(string $filter = '', $order='DESC'): array;
-	public function paginate(string $filter = '', string $order='DESC', int $page = 1, int $totalPage = 15): PaginationInterface;
-	public function update(Category $category): Category;
-	public function delete(string $id): bool;
-	public function toCategory(object $data): Category;
+
 }

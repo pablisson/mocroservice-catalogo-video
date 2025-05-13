@@ -64,10 +64,7 @@ class CategoryController extends Controller
 			->response()
 			->setStatusCode(Response::HTTP_CREATED);
 	}
-	/**
-	 * TODO: A principio deixarei passando o $id para em um segundo momento atualizar para o padrão
-	 * do laravel de trazer a model automaticamente
-	 */
+
 	public function show(ListCategoryUseCase $useCase,  $id)
 	{
 		$response = $useCase->execute(
