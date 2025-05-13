@@ -10,6 +10,7 @@ use Core\Domain\ValueObject\Uuid;
 use DateTime;
 use Dom\Entity;
 use Illuminate\Support\Facades\Date;
+use Ramsey\Uuid\Nonstandard\Uuid as NonstandardUuid;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class GenreUnitTest extends TestCase
@@ -19,7 +20,7 @@ class GenreUnitTest extends TestCase
 	private DateTime $date;
 	protected function setUp(): void
 	{
-		$this->uuid = (string)RamseyUuid::uuid4();
+		$this->uuid = RamseyUuid::uuid4()->toString();
 		$this->date = new DateTime(date('Y-m-d H:i:s'));
 
 		$this->genre = new Genre(
@@ -102,20 +103,32 @@ class GenreUnitTest extends TestCase
 
 	public function test_add_category_to_genre()
 	{
-		$category1 = new Category(name: 'Category 1');
-		$category2 = new Category(name: 'Category 2');
+		$categoryId1 = RamseyUuid::uuid4()->toString();
+		$categoryId2 = RamseyUuid::uuid4()->toString();
 
 		$this->assertIsArray($this->genre->categoriesId());
 		$this->assertCount(0, $this->genre->categoriesId());
 
-		$this->genre->addCategory(categoryId: $category1->id());
-		$this->genre->addCategory(categoryId: $category2->id());
+		$this->genre->addCategory(categoryId: $categoryId1);
+		$this->genre->addCategory(categoryId: $categoryId2);
 
 		$this->assertCount(2, $this->genre->categoriesId());
-		
-		$this->genre->addCategory(categoryId: $category1->id());
+
+		$this->genre->addCategory(categoryId: $categoryId1->id());
 		$this->assertCount(2, $this->genre->categoriesId());
 	}
 
+	public function test_remove_category_to_genre()
+	{
+		$categoryId1 = RamseyUuid::uuid4()->toString();
+		$categoryId2 = RamseyUuid::uuid4()->toString();
 
+		$this->genre->addCategory(categoryId: $categoryId1);
+		$this->genre->addCategory(categoryId: $categoryId2);
+
+		$this->genre->removeCategory(categoryId: $categoryId1);
+		$this->assertCount(1, $this->genre->categoriesId());
+
+		$this->assertTrue(in_array($categoryId1, $this->genre->categoriesId()));		
+	}
 }

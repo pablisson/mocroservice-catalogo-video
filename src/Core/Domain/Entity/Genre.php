@@ -45,5 +45,11 @@ class Genre
 		return $this->categoriesId;
 	}
 
+	public function removeCategory(string $categoryId): void
+	{
+		if(in_array($categoryId, $this->categoriesId)) {
+			$this->categoriesId = array_diff($this->categoriesId, [$categoryId]);
+		}
+	}
 
 }
