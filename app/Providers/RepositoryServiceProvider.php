@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\Eloquent\CategoryRepository;
 use Core\Domain\Repository\CategoryRepositoryInterface;
+use Core\Domain\Repository\GenreRepositoryInterface;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +16,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+		// $this->app->singleton(GenreRepositoryInterface::class, GenreRepository::class);
 		$this->app->singleton(CategoryRepositoryInterface::class, CategoryRepository::class);
 		$this->app->singleton(ExceptionHandler::class, \App\Exceptions\Handler::class);
     }
