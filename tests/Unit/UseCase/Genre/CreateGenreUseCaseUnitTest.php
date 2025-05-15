@@ -8,9 +8,11 @@ use Core\Domain\ValueObject\Uuid as ValueObjectUuid;
 use Core\DTO\Genre\GenreInputDto;
 use Core\DTO\Genre\GenreOutputDto;
 use Core\UseCase\Genre\CreateGenreUseCase;
+use Core\UseCase\Interfaces\DatabaseTransactionInterface;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use stdClass;
 
 class CreateGenreUseCaseUnitTest extends TestCase
 {
@@ -34,7 +36,9 @@ class CreateGenreUseCaseUnitTest extends TestCase
 			$name,
 		]);
 
-		$useCase = new CreateGenreUseCase($mockRepository);
+		$mockDbTransaction = Mockery::mock(DatabaseTransactionInterface::class);
+
+		$useCase = new CreateGenreUseCase($mockRepository, $mockDbTransaction);
 		$response = $useCase->execute($mockInputDto);
 
 		$this->assertInstanceOf(GenreOutputDto::class, $response);
