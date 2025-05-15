@@ -19,7 +19,7 @@ class ListGenreUseCase
 	public function execute(GenreInputDto $inputDto): GenreOutputDto
 	{
 		$genre = $this->repository->findById($inputDto->id);
-		dump($genre->deletedAt());
+		
 		return new GenreOutputDto(
 			id: $genre->id(),
 			name: $genre->name,
