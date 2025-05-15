@@ -32,16 +32,18 @@ class CreateGenreUseCase
 				isActive: $inputDto->isActive,
 				categoriesId: $inputDto->categoriesId
 			);
-
+			$this->validateCategoryId($inputDto->categoriesId);
 			$newGenre = $this->repository->insert($genre);
-			
+
+			$this->dbTransaction->commit();
+
 			return new CreateGenreOutputDto(
 				id: (string) $newGenre->id(),
 				name: $newGenre->name,
 				is_active: $newGenre->isActive,
 				created_at: $newGenre->createdAt(),
 			);
-			$this->dbTransaction->commit();
+			
 		}catch (\Throwable $th){
 			$this->dbTransaction->rollback();
 			throw $th;
@@ -52,12 +54,17 @@ class CreateGenreUseCase
 	{
 		$categoriesDb = $this->categoryRepository->getIdsListIds($categoriesId);
 
-		if(count($categoriesDb) !== count($categoriesId)){
-			throw new NotFoundException('Categories is different fom database');
-		}
-		foreach($categoriesId as $catetory){
+		$arrayDiff = array_diff($categoriesId, $categoriesDb);
 
+		if(count($arrayDiff)){
+			$message = sprintf(
+				'%s %s not found',
+				count($arrayDiff) > 1 ? 'Categories' : 'Category',
+				implode(', ',$arrayDiff)
+			);
+			throw new NotFoundException($message);
 		}
+
 	}
 	
 

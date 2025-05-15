@@ -43,7 +43,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 		return $this->model
 					->whereIn('id', $categoriesId)
 					->get()
-					->pluck('id');
+					->pluck('id')
+					->toArray();
 	}
 
 	public function findAll(string $filter = '', $order='DESC'): array
