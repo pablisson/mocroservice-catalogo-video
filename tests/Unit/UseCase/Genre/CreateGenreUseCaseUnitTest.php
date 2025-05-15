@@ -6,8 +6,8 @@ use Core\Domain\Entity\Genre as EntityGenre;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\GenreRepositoryInterface;
 use Core\Domain\ValueObject\Uuid as ValueObjectUuid;
-use Core\DTO\Genre\CreateGenreInputDto;
-use Core\DTO\Genre\CreateGenreOutputDto;
+use Core\DTO\Genre\CreateGenre\CreateGenreInputDto;
+use Core\DTO\Genre\CreateGenre\CreateGenreOutputDto;
 use Core\UseCase\Genre\CreateGenreUseCase;
 use Core\UseCase\Interfaces\DatabaseTransactionInterface;
 use Mockery;
@@ -21,6 +21,7 @@ class CreateGenreUseCaseUnitTest extends TestCase
     {
 
 		$uuid = Uuid::uuid4()->toString();
+		$uuidCategory = Uuid::uuid4()->toString();
 		$name = 'teste';
 
 		$genreEntity = new EntityGenre(
@@ -29,15 +30,18 @@ class CreateGenreUseCaseUnitTest extends TestCase
 
 		);
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('insert')->andReturn($genreEntity);
+		$mockRepository->shouldReceive('insert')->andReturn($genreEntity);		
 
 		$mockInputDto = Mockery::mock(CreateGenreInputDto::class,[
-			$uuid,
-			$name,
+			$name, [$uuidCategory], true
 		]);
 
 		$mockCategoryRepository = Mockery::mock(CategoryRepositoryInterface::class);
+	
+		$mockCategoryRepository->shouldReceive('getIdsListIds')->andReturn([$uuidCategory]);
 		$mockDbTransaction = Mockery::mock(DatabaseTransactionInterface::class);
+		$mockDbTransaction->shouldReceive('commit');
+		$mockDbTransaction->shouldReceive('rollback');
 
 		$useCase = new CreateGenreUseCase($mockRepository, $mockDbTransaction, $mockCategoryRepository);
 		$response = $useCase->execute($mockInputDto);

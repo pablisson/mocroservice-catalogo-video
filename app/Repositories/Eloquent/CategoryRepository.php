@@ -38,6 +38,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 		return $this->toCategory($categoryModel);
 	}
 
+	public function getIdsListIds(array $categoriesId = []):array
+	{		
+		return $this->model
+					->whereIn('id', $categoriesId)
+					->get()
+					->pluck('id');
+	}
+
 	public function findAll(string $filter = '', $order='DESC'): array
 	{
 		$categories = $this->model

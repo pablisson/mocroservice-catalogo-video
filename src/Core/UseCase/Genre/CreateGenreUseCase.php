@@ -3,38 +3,61 @@
 namespace Core\UseCase\Genre;
 
 use Core\Domain\Entity\Genre;
+use Core\Domain\Exception\NotFoundException;
+use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\GenreRepositoryInterface;
-use Core\DTO\Genre\GenreInputDto;
-use Core\DTO\Genre\GenreOutputDto;
+use Core\DTO\Genre\CreateGenre\CreateGenreInputDto;
+use Core\DTO\Genre\CreateGenre\CreateGenreOutputDto;
+use Core\UseCase\Interfaces\DatabaseTransactionInterface;
 
 class CreateGenreUseCase
 {
 	
 	public function __construct(
-		protected GenreRepositoryInterface $repository
+		protected GenreRepositoryInterface $repository,
+		protected DatabaseTransactionInterface $dbTransaction,
+		protected CategoryRepositoryInterface $categoryRepository
 		)
 	{
 		
 	}
 
-	public function execute(GenreInputDto $inputDto): GenreOutputDto
+	public function execute(CreateGenreInputDto $inputDto): CreateGenreOutputDto
 	{
-		$genre = new Genre(
-			name: $inputDto->name,
-			description: $inputDto->description,
-			isActive: $inputDto->isActive
-		);
+		try {
+			$this->validateCategoryId($inputDto->categoriesId);
 
-		$newGenre = $this->repository->insert($genre);
-		
-		return new GenreOutputDto(
-			id: $newGenre->id(),
-			name: $newGenre->name,
-			description: $newGenre->description,
-			is_active: $newGenre->isActive,
-			created_at: $newGenre->createdAt(),
-			deleted_at: $newGenre->deletedAt()
-		);
+			$genre = new Genre(
+				name: $inputDto->name,			
+				isActive: $inputDto->isActive,
+				categoriesId: $inputDto->categoriesId
+			);
+
+			$newGenre = $this->repository->insert($genre);
+			
+			return new CreateGenreOutputDto(
+				id: (string) $newGenre->id(),
+				name: $newGenre->name,
+				is_active: $newGenre->isActive,
+				created_at: $newGenre->createdAt(),
+			);
+			$this->dbTransaction->commit();
+		}catch (\Throwable $th){
+			$this->dbTransaction->rollback();
+			throw $th;
+		}
+	}
+
+	public function validateCategoryId(array $categoriesId = [])
+	{
+		$categoriesDb = $this->categoryRepository->getIdsListIds($categoriesId);
+
+		if(count($categoriesDb) !== count($categoriesId)){
+			throw new NotFoundException('Categories is different fom database');
+		}
+		foreach($categoriesId as $catetory){
+
+		}
 	}
 	
 
