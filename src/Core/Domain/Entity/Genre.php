@@ -3,6 +3,7 @@
 namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Traits\EntityBase;
+use Core\Domain\Entity\Traits\MethodsMagicsTrait;
 use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Uuid;
@@ -10,7 +11,7 @@ use DateTime;
 
 class Genre
 {
-	use Traits\MethodsMagicsTrait, EntityBase;
+	use MethodsMagicsTrait, EntityBase;
 
 	/**
 	 * @param string $id
