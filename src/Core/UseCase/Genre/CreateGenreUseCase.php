@@ -32,7 +32,7 @@ class CreateGenreUseCase
 				isActive: $inputDto->isActive,
 				categoriesId: $inputDto->categoriesId
 			);
-			$this->validateCategoryId($inputDto->categoriesId);
+			
 			$newGenre = $this->repository->insert($genre);
 
 			$this->dbTransaction->commit();
