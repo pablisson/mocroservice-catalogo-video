@@ -3,20 +3,6 @@ on: [push, pull_request]
 jobs:
   check-application:
     runs-on: ubuntu-latest
-    services:
-      db:
-        image: mysql:8.0
-        ports:
-          - 33006:3306
-        env:
-          MYSQL_DATABASE: code_micro_videos
-          MYSQL_ROOT_PASSWORD: root
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=30s
-          --health-timeout=10s
-          --health-retries=5
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up PHP
@@ -34,9 +20,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
-
-      - name: Copy .env
-        run: cp .env.example .env
 
       - name: Generate app key
         run: php artisan key:generate
