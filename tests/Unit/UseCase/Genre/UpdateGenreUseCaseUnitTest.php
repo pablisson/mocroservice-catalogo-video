@@ -39,7 +39,7 @@ class UpdateGenreUseCaseUnitTest extends TestCase
 		$newName = "name updated";
 		$newUuid = Uuid::uuid4()->toString();
 		$newGenre = new EntityGenre(
-			name: "name updated",
+			name: $newName,
 			id: new ValueObjectUuid($this->uuid)
 		);
 
@@ -67,12 +67,19 @@ class UpdateGenreUseCaseUnitTest extends TestCase
 	public function test_update_categories_notfound(): void
     {
 		$this->expectException(NotFoundException::class);
-		
+
+		$newName = "name updated";
+		$newUuid = Uuid::uuid4()->toString();
+		$newGenre = new EntityGenre(
+			name: $newName,
+			id: new ValueObjectUuid($this->uuid)
+		);
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('insert')->andReturn($this->genreEntity);		
+		$mockRepository->shouldReceive('insert')->andReturn($newGenre);		
+		$mockRepository->shouldReceive('findById')->andReturn($this->genreEntity);
 
 		$mockInputDto = Mockery::mock(UpdateGenreInputDto::class,[
-			$this->name, [$this->uuidCategory, 'fake_id', 'new_fake_id'], true
+			$this->uuid, $this->name, [$this->uuidCategory,'fake-uuid'], true
 		]);
 
 		$mockCategoryRepository = Mockery::mock(CategoryRepositoryInterface::class);
