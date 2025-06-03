@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DTO\Category\DeleteCategories;
+namespace Core\DTO\Genre\DeleteGenre;
 
 class DeleteGenreOutputDto
 {
@@ -10,7 +10,7 @@ class DeleteGenreOutputDto
 		public string $description = '',
 		public bool $is_active = true,
 		public string $created_at = '',
-		public string $deleted_at = '',
+		public string | null $deleted_at = '',
 	) {
 	}
 }
