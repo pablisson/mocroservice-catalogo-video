@@ -20,12 +20,12 @@ trait MethodsMagicsTrait
 		return (string)$this->id;
 	}
 	
-	public function createdAt(string $format = 'Y-m-d H:i:s'): string
+	public function createdAt(string $format = 'Y-m-d H:i:s'): ?string
 	{
 		return $this->createdAt->format($format);
 	}
 
-	public function deletedAt(string $format = 'Y-m-d H:i:s'): string
+	public function deletedAt(string $format = 'Y-m-d H:i:s'): ?string
 	{
 		return $this->deletedAt ? $this->deletedAt->format($format) : null;
 	}
