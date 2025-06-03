@@ -44,8 +44,8 @@ class UpdateGenreUseCaseUnitTest extends TestCase
 		);
 
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('update')->andReturn($newGenre);		
-		$mockRepository->shouldReceive('findById')->andReturn($this->genreEntity);
+		$mockRepository->shouldReceive('update')->once()->andReturn($newGenre);		
+		$mockRepository->shouldReceive('findById')->once()->andReturn($this->genreEntity);
 
 		$mockInputDto = Mockery::mock(UpdateGenreInputDto::class,[
 			$this->uuid, $this->name, [$this->uuidCategory], true
@@ -75,8 +75,8 @@ class UpdateGenreUseCaseUnitTest extends TestCase
 			id: new ValueObjectUuid($this->uuid)
 		);
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('insert')->andReturn($newGenre);		
-		$mockRepository->shouldReceive('findById')->andReturn($this->genreEntity);
+		$mockRepository->shouldReceive('update')->times(0)->andReturn($newGenre);		
+		$mockRepository->shouldReceive('findById')->once()->with($this->uuid)->andReturn($this->genreEntity);
 
 		$mockInputDto = Mockery::mock(UpdateGenreInputDto::class,[
 			$this->uuid, $this->name, [$this->uuidCategory,'fake-uuid'], true
