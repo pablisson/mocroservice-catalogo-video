@@ -38,14 +38,18 @@ class CreateGenreUseCaseUnitTest extends TestCase
     {
 
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('insert')->andReturn($this->genreEntity);		
+		$mockRepository->shouldReceive('insert')
+					->once()
+					->andReturn($this->genreEntity);		
 
 		$mockInputDto = Mockery::mock(CreateGenreInputDto::class,[
 			$this->name, [$this->uuidCategory], true
 		]);
 
 		$mockCategoryRepository = Mockery::mock(CategoryRepositoryInterface::class);
-		$mockCategoryRepository->shouldReceive('getIdsListIds')->andReturn([$this->uuidCategory]);
+		$mockCategoryRepository->shouldReceive('getIdsListIds')
+							->once()
+							->andReturn([$this->uuidCategory]);
 
 		$mockDbTransaction = Mockery::mock(DatabaseTransactionInterface::class);
 		$mockDbTransaction->shouldReceive('commit');
@@ -63,7 +67,7 @@ class CreateGenreUseCaseUnitTest extends TestCase
 		
 
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('insert')->andReturn($this->genreEntity);		
+		$mockRepository->shouldReceive('insert')->times(0)->andReturn($this->genreEntity);		
 
 		$mockInputDto = Mockery::mock(CreateGenreInputDto::class,[
 			$this->name, [$this->uuidCategory, 'fake_id', 'new_fake_id'], true
@@ -71,7 +75,7 @@ class CreateGenreUseCaseUnitTest extends TestCase
 
 		$mockCategoryRepository = Mockery::mock(CategoryRepositoryInterface::class);
 	
-		$mockCategoryRepository->shouldReceive('getIdsListIds')->andReturn([$this->uuidCategory]);
+		$mockCategoryRepository->shouldReceive('getIdsListIds')->once()->andReturn([$this->uuidCategory]);
 		$mockDbTransaction = Mockery::mock(DatabaseTransactionInterface::class);
 		$mockDbTransaction->shouldReceive('commit');
 		$mockDbTransaction->shouldReceive('rollback');

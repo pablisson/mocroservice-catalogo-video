@@ -28,7 +28,7 @@ class ListGenreUseCaseUnitTest extends TestCase
 
 		);
 		$mockRepository = Mockery::mock(GenreRepositoryInterface::class);
-		$mockRepository->shouldReceive('findById')->andReturn($genreEntity);
+		$mockRepository->shouldReceive('findById')->once()->with($uuid)->andReturn($genreEntity);
 
 		$mockInputDto = Mockery::mock(GenreInputDto::class,[
 			$uuid
