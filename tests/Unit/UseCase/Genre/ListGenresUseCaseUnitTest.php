@@ -45,6 +45,25 @@ class ListGenresUseCaseUnitTest extends TestCase
 
 		$response = $useCase->execute($mockDtoInput);
 		$this->assertInstanceOf(ListGenresOutputDto::class, $response);
+
+		/**
+		 * Spies
+		 */
+		// arrange
+		$spy = Mockery::spy(GenreRepositoryInterface::class);
+		$spy->shouldReceive('paginate')->once()->andReturn($this->mockPagination());
+
+		// actino
+		$useCase = new ListGenresUseCase($spy);
+		$useCase->execute($mockDtoInput);
+
+		// precisei setar essa função abaixo do itelephense porque ele não reconhece
+		// o with porque é implementado via metodo dinâmico __call
+		/** @disregard P1013 */
+		$spy->shouldHaveReceived('paginate')
+			->with('teste', 'desc', 1, 15)
+			->once();
+
     }
 
 	
