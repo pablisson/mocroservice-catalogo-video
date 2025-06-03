@@ -2,7 +2,7 @@
 
 namespace Core\UseCase\Genre;
 
-use Core\Domain\Entity\Genre;
+use Core\Domain\Entity\Genre as EntityGenre;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\GenreRepositoryInterface;
@@ -27,7 +27,7 @@ class CreateGenreUseCase
 		try {
 			$this->validateCategoryId($inputDto->categoriesId);
 
-			$genre = new Genre(
+			$genre = new EntityGenre(
 				name: $inputDto->name,			
 				isActive: $inputDto->isActive,
 				categoriesId: $inputDto->categoriesId
