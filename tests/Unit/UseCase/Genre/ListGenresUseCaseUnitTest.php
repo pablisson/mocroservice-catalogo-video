@@ -47,6 +47,8 @@ class ListGenresUseCaseUnitTest extends TestCase
 		$this->assertInstanceOf(ListGenresOutputDto::class, $response);
     }
 
+	
+
 	protected function tearDown(): void
 	{
 		Mockery::close();
